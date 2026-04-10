@@ -3,5 +3,7 @@ name = "practica"
 version = "0.1.0"
 requires-python = ">=3.12"
 dependencies = [
-    "django>=6.0.3",
+    "django>=6.0.2",
+    "mistune>=3.0",
+    "psycopg[binary]>=3.2",  # PostgreSQL driver for Django
 ]
