@@ -1,0 +1,54 @@
+/* STYLE FROM CV EXAMPLE, MODIFY IT */
+
+/* Reset browser defaults */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;  /* padding won't increase element size */
+}
+
+/* Base text style */
+body {
+    font-family: Georgia, serif;  /* Georgia font, or any serif as fallback */
+    line-height: 1.6;  /* 160% line spacing, easier to read */
+    color: #333;  /* dark gray text */
+}
+
+/* Top navigation bar */
+nav {
+    background: darkslategray;
+    padding: 1rem 2rem;  /* rem = relative to base font size (1rem ≈ 16px) */
+}
+
+nav a {
+    color: white;
+    text-decoration: none;  /* remove underline from links */
+    margin-right: 1.5rem;
+    font-size: 1.1rem;
+}
+
+nav a:hover {  /* :hover = when the mouse is over the element */
+    color: lightblue;
+}
+
+/* Main content area */
+.container {  /* .container = targets elements with class="container" */
+    max-width: 800px;
+    margin: 2rem auto;  /* 2rem top/bottom, auto left/right (centers it) */
+    padding: 0 1rem;
+}
+
+/* Headings */
+h1, h2, h3 {  /* comma = apply to all three */
+    margin-bottom: 1rem;
+    color: darkslategray;
+}
+
+/* Page footer */
+footer {
+    text-align: center;
+    padding: 2rem;
+    color: gray;
+    margin-top: 3rem;
+    border-top: 1px solid lightgray;  /* 1px line, solid (not dashed), lightgray */
+}
