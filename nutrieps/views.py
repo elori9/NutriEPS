@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from .models import ConsumptionLog
 
 # Create your views here.
 
@@ -16,4 +17,6 @@ def profile(request):
 
 def history(request):
     """History page view."""
-    return render(request, 'nutrieps/history.html')
+    model = ConsumptionLog  # Table where to query
+    template_name = 'nutrieps/history.html'
+    context_object_name = 'logs'  # variable name in template
