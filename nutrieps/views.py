@@ -6,6 +6,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView
 
 from .form import UserProfileForm
+from .models import UserProfile
 from .models import ConsumptionLog
 
 
@@ -46,9 +47,15 @@ def search(request):
 @login_required
 def profile(request):
     """Profile page view - P5 logic. Handles BMR calculation and profile updates."""
-    calculated_calories = None
-    weight = None
-    height = None
+
+    user_profile, created = UserProfile.objects.get_or_create(
+        user=request.user,
+        defaults={
+            'weight': 0.0,
+            'height': 0.0,
+            'calories_goal': 0
+        }
+    )
 
     if request.method == 'POST':
         form = UserProfileForm(request.POST)
@@ -59,7 +66,7 @@ def profile(request):
             height = form.cleaned_data['height']
             activity_level = float(form.cleaned_data['activity_level'])
 
-            # 2. Perform calculations (Mifflin-St Jeor formula)
+            # 2. Perform calculations(Mifflin-St Jeor formula)
             if gender == 'M':
                 tmb = (10 * weight) + (6.25 * height) - (5 * age) + 5
             else:
@@ -67,38 +74,22 @@ def profile(request):
 
             calculated_calories = round(tmb * activity_level)
 
-            # 3. Save to Database
-            # PENDING: Replace "UserProfile" and "user_profile" with the real model
-            # when the database teammate provides the exact names.
-            # user_profile = request.user.userprofile
-            # user_profile.weight = weight
-            # user_profile.height = height
-            # user_profile.daily_goal = calculated_calories
-            # user_profile.save()
+            # 3. Save to database
+            user_profile.weight = weight
+            user_profile.height = height
+            user_profile.calories_goal = calculated_calories
+            user_profile.save()
 
     else:
-        # 1. If the user is just visiting the page (GET request)
+        # 1. If user just visiting the page (GET request)
         form = UserProfileForm()
 
-        # PENDING: Read real data from the DB if the user already has a profile
-        # if hasattr(request.user, 'userprofile'):
-        #     weight = request.user.userprofile.weight
-        #     height = request.user.userprofile.height
-        #     calculated_calories = request.user.userprofile.daily_goal
-
-        # Meanwhile, use mock data if nothing is calculated yet
-        weight = 72.5
-        height = 180
-        calculated_calories = 2000
-
-    # 4. Context dictionary to send to the Frontend (P3)
-    # The 'profile_form' is now real and ready for P3 to render.
     context = {
         'profile_form': form,
         'current_profile': {
-            'weight': weight,
-            'height': height,
-            'calories_goal': calculated_calories
+            'weight': user_profile.weight,
+            'height': user_profile.height,
+            'calories_goal': user_profile.calories_goal
         }
     }
 
