@@ -5,7 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 
-from .form import UserProfileForm
+from .forms import UserProfileForm
 from .models import UserProfile
 from .models import ConsumptionLog
 
@@ -51,6 +51,7 @@ def search(request):
     }
     return render(request, 'nutrieps/search.html', context)
 
+
 @login_required
 def profile(request):
     """Profile page view - P5 logic. Handles BMR calculation and profile updates."""
@@ -89,7 +90,13 @@ def profile(request):
 
     else:
         # 1. If user just visiting the page (GET request)
-        form = UserProfileForm()
+        form = UserProfileForm(
+            # Initial information for help user
+            initial={
+                'weight': user_profile.weight,
+                'height': user_profile.height,
+            }
+        )
 
     context = {
         'profile_form': form,
