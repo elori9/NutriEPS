@@ -9,6 +9,8 @@ from .form import UserProfileForm
 from .models import UserProfile
 from .models import ConsumptionLog
 
+from .services import search_foods
+
 
 # Create your views here.
 
@@ -30,19 +32,24 @@ def home(request):
 
 
 def search(request):
-    """Search page view - P4 logic. Now with mock data for P3 (Frontend)"""
+    """Search page view - P4 logic with real API data."""
 
-    # NEED REAL DATA ....
+    search_term = request.GET.get("q", "").strip()
+    api_results = []
+    error_message = None
 
-    # Mock data following the contract so P2 can design the UI/charts
+    if search_term:
+        try:
+            api_results = search_foods(search_term)
+        except Exception:
+            error_message = "No se ha podido realizar la búsqueda ahora mismo."
+
     context = {
-        'search_term': "Chicken",
-        'api_results': [
-            {'name': 'Chicken Breast (Raw)', 'calories': 110, 'protein': 23, 'carbs': 0, 'fat': 1.2},
-        ]
+        'search_term': search_term,
+        'api_results': api_results,
+        'error_message': error_message,
     }
     return render(request, 'nutrieps/search.html', context)
-
 
 @login_required
 def profile(request):
