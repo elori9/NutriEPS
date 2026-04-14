@@ -7,7 +7,6 @@ from django.views.generic import CreateView
 
 from .forms import UserProfileForm
 from .models import UserProfile
-from .models import ConsumptionLog
 
 from .services import search_foods
 
@@ -42,7 +41,7 @@ def search(request):
         try:
             api_results = search_foods(search_term)
         except Exception:
-            error_message = "No se ha podido realizar la búsqueda ahora mismo."
+            error_message = f"Couldn't connect to the food database: {search_term}, try again later."
 
     context = {
         'search_term': search_term,

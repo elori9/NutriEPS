@@ -2,7 +2,6 @@ import json
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
-
 BASE_URL = "https://world.openfoodfacts.org/cgi/search.pl"
 
 
@@ -38,7 +37,7 @@ def search_foods(search_term):
 
     request = Request(
         url,
-        headers={"User-Agent": "NutriEPS/1.0"}
+        headers={"User-Agent": "NutriEPS/1.0 (Python/3.13; Project-NutriEPS-UdL)"}
     )
 
     with urlopen(request, timeout=10) as response:
