@@ -21,3 +21,11 @@ class UserProfileForm(forms.Form):
     weight = forms.FloatField(label="Weight (kg)", min_value=30.0, max_value=300.0)
     height = forms.FloatField(label="Height (cm)", min_value=100.0, max_value=250.0)
     activity_level = forms.ChoiceField(choices=ACTIVITY_CHOICES, label="Activity level")
+
+class ConsumptionForm(forms.Form):
+    food_name = forms.CharField(max_length=200)
+    calories = forms.FloatField()
+    protein = forms.FloatField(required=False, initial=0)
+    carbs = forms.FloatField(required=False, initial=0)
+    fat = forms.FloatField(required=False, initial=0)
+    quantity = forms.FloatField(min_value=1, label="Quantity (g)")

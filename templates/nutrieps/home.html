@@ -18,13 +18,13 @@
             <div class="tracker-body">
                 <div class="calorie-doughnut">
                     <div class="doughnut-text">
-                        <span class="calories-left">2400</span>
+                        <span class="calories-left">{{ calories_remaining }}</span>
                         <p>Remaining</p>
                     </div>
                 </div>
                 <div class="calorie-list">
-                    <div class="c-item">Goal <span>2400</span></div>
-                    <div class="c-item">Food <span class="orange-txt">0</span></div>
+                    <div class="c-item">Goal <span>{{ calories_goal }}</span></div>
+                    <div class="c-item">Food <span class="orange-txt">{{ calories_consumed }}</span></div>
                     <div class="c-item">Exercise <span class="green-txt">0</span></div>
                 </div>
             </div>
@@ -34,15 +34,15 @@
             <div class="card-header"><h3>Daily Macronutrients</h3></div>
             <div class="macro-body">
                 <div class="macro-item">
-                    <div class="macro-circle blue-ring">0g</div>
+                    <div class="macro-circle blue-ring">{{ total_carbs }}g</div>
                     <span>Carbs</span>
                 </div>
                 <div class="macro-item">
-                    <div class="macro-circle purple-ring">0g</div>
+                    <div class="macro-circle purple-ring">{{ total_fat }}g</div>
                     <span>Fat</span>
                 </div>
                 <div class="macro-item">
-                    <div class="macro-circle green-ring">0g</div>
+                    <div class="macro-circle green-ring">{{ total_protein }}g</div>
                     <span>Protein</span>
                 </div>
             </div>
