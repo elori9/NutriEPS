@@ -1,8 +1,138 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Home - NUTRIEPS{% endblock %}
 
 {% block content %}
-<h1>Welcome to My NUTRIEPS</h1>
-<p>This is the home page of our Django blog.</p>
+
+{% if user.is_authenticated %}
+<div class="dashboard-container">
+    <div class="dash-greeting">
+        <h2>Welcome back, <span class="eps-color">{{ user.username }}</span>! 👋</h2>
+        <p>Track your nutrition and reach your fitness goals today.</p>
+    </div>
+
+    <div class="dash-summary-grid">
+        <div class="summary-card">
+            <div class="card-header"><h3>Calories</h3></div>
+            <div class="tracker-body">
+                <div class="calorie-doughnut">
+                    <div class="doughnut-text">
+                        <span class="calories-left">2400</span>
+                        <p>Remaining</p>
+                    </div>
+                </div>
+                <div class="calorie-list">
+                    <div class="c-item">Goal <span>2400</span></div>
+                    <div class="c-item">Food <span class="orange-txt">0</span></div>
+                    <div class="c-item">Exercise <span class="green-txt">0</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="summary-card">
+            <div class="card-header"><h3>Daily Macronutrients</h3></div>
+            <div class="macro-body">
+                <div class="macro-item">
+                    <div class="macro-circle blue-ring">0g</div>
+                    <span>Carbs</span>
+                </div>
+                <div class="macro-item">
+                    <div class="macro-circle purple-ring">0g</div>
+                    <span>Fat</span>
+                </div>
+                <div class="macro-item">
+                    <div class="macro-circle green-ring">0g</div>
+                    <span>Protein</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h3 class="section-label">Quick Actions</h3>
+    <div class="quick-links-grid">
+        <a href="{% url 'nutrieps:search' %}" class="nav-button-card">
+            <div class="nav-icon bg-orange-light">🔍</div>
+            <div class="nav-info">
+                <h4>Search Food</h4>
+                <p>Log your meals instantly.</p>
+            </div>
+        </a>
+        <a href="{% url 'nutrieps:history' %}" class="nav-button-card">
+            <div class="nav-icon bg-green-light">📅</div>
+            <div class="nav-info">
+                <h4>My History</h4>
+                <p>Check your past logs.</p>
+            </div>
+        </a>
+        <a href="{% url 'nutrieps:profile' %}" class="nav-button-card">
+            <div class="nav-icon bg-gray-light">👤</div>
+            <div class="nav-info">
+                <h4>My Profile</h4>
+                <p>Edit your goals.</p>
+            </div>
+        </a>
+    </div>
+</div>
+
+{% else %}
+<div class="landing-full">
+    <section class="top">
+        <div class="top-content">
+            <h1>Good health starts with good nutrition.</h1>
+            <p>Want to pay more attention to what you eat? Track your meals, learn your habits, and reach your goals with NUTRIEPS.</p>
+            <a href="{% url 'signup' %}" class="btn-start">START</a>
+        </div>
+        <div class="image-side">
+            <img src="{% static 'nutrieps/images/healthy-food.png' %}" alt="Healthy Food Plate">
+        </div>
+    </section>
+
+    <section class="master-diet">
+        <div class="master-text">
+            <h2>Master your diet,<br>fuel your <span class="eps-color">body.</span></h2>
+            <ul class="check-list-en">
+                <li><span class="check-box">✓</span> Search by barcode or food name.</li>
+                <li><span class="check-box">✓</span> Track your daily macros instantly.</li>
+                <li><span class="check-box">✓</span> Hit your weight goals with ease.</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="food-promo">
+        <div class="food-inner">
+            <div class="food-visual">
+                <div class="yellow-circle"></div>
+                <img src="{% static 'nutrieps/images/fruits.png' %}" alt="Fruit search">
+            </div>
+            <div class="food-text">
+                <h2>Choose from millions of foods to keep your log.</h2>
+                <p>Access a breakdown of calories and nutrients, compare portion sizes, and discover how the foods you consume support your goals.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="tools-promo">
+        <h2 class="center-title">Tools for your goals</h2>
+        <p class="center-sub">Everything you need to succeed in your fitness journey.</p>
+        <div class="tools-grid-en">
+            <div class="tool-card-en">
+                <div class="tool-icon">📓</div>
+                <h3>Learn. Log. Improve.</h3>
+                <p>Keeping a food diary helps you understand your habits.</p>
+            </div>
+            <div class="tool-card-en">
+                <div class="tool-icon">🏷️</div>
+                <h3>Simplified Logging.</h3>
+                <p>Scan barcodes and save meals for quick access.</p>
+            </div>
+            <div class="tool-card-en">
+                <div class="tool-icon">👟</div>
+                <h3>Stay Motivated.</h3>
+                <p>Join our community and get tips to stay on track.</p>
+            </div>
+        </div>
+    </section>
+</div>
+{% endif %}
 {% endblock %}
