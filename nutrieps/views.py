@@ -13,11 +13,14 @@ from .services import search_foods
 
 # Create your views here.
 
-@login_required
 def home(request):
     """Home page view - P6 logic. Real data from database"""
     from django.utils import timezone
     
+    # Si l'usuari no ha iniciat sessió, enviem-lo a l'HTML perquè vegi el Landing Page
+    if not request.user.is_authenticated:
+        return render(request, 'nutrieps/home.html', {})
+        
     today = timezone.now().date()
     
     # 1. Obtenir les metes de l'usuari (P5)
