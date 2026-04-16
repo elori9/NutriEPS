@@ -1,11 +1,68 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Search</title>
-</head>
-<body>
-    <h1>Welcome to SEARCH</h1>
-    <p>This is the search page.</p>
-</body>
-</html>
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Search food - NUTRIEPS{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="dash-greeting" style="text-align: center; margin-bottom: 2rem;">
+        <h2>Food Search</h2>
+        <p>Find and add items to your daily log.</p>
+    </div>
+
+    <div class="summary-card" style="max-width: 600px; margin: 0 auto 3rem auto; padding: 2rem;">
+        <form method="GET" action="{% url 'nutrieps:search' %}" style="display: flex; gap: 10px;">
+            <input type="text" name="q" value="{{ search_term }}" placeholder="Type a food name ..." required
+                   style="flex: 1; padding: 0.8rem 1rem; border: 1px solid var(--color-border); border-radius: 8px; font-size: 1rem; outline: none;">
+            <button type="submit" class="profile-btn" style="border-radius: 8px;">Search</button>
+        </form>
+    </div>
+
+    {% if error_message %}
+    <div class="error-message" style="max-width: 600px; margin: 0 auto 2rem auto;">
+        {{ error_message }}
+    </div>
+    {% endif %}
+
+    {% if api_results %}
+    <h3 class="section-label">Results for "<span class="eps-color">{{ search_term }}</span>"</h3>
+
+    <div class="quick-links-grid">
+        {% for food in api_results %}
+        <div class="summary-card"
+             style="padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+                <h4 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 0.5rem;">{{ food.name }}</h4>
+                <p style="color: var(--color-text-gray); font-size: 0.9rem; margin-bottom: 1rem;">
+                    <strong>{{ food.calories }} Kcal</strong><br>
+                    Proteins: {{ food.protein }}g | Carbs: {{ food.carbs }}g | Fats: {{ food.fat }}g
+                </p>
+            </div>
+
+            <form method="POST" action="{% url 'nutrieps:add_consumption' %}">
+                {% csrf_token %}
+                <input type="hidden" name="food_name" value="{{ food.name }}">
+                <input type="hidden" name="calories" value="{{ food.calories }}">
+                <input type="hidden" name="protein" value="{{ food.protein }}">
+                <input type="hidden" name="carbs" value="{{ food.carbs }}">
+                <input type="hidden" name="fat" value="{{ food.fat }}">
+
+                <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                    <input type="number" name="quantity" value="100" min="1"
+                           style="width: 80px; padding: 0.5rem; border: 1px solid #ccc; border-radius: 5px;">
+                    <span style="align-self: center; color: var(--color-text-gray);">grams</span>
+                </div>
+
+                <button type="submit" class="submit-btn green-btn" style="margin-top: 0;">+ Add to Today</button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% elif search_term %}
+    <div style="text-align: center; color: var(--color-text-gray); margin-top: 3rem;">
+        <p>No food found for "{{ search_term }}".</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
