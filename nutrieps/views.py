@@ -1,12 +1,13 @@
+from django.utils import timezone
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 
-from .forms import UserProfileForm
-from .models import UserProfile, ConsumptionLog
+from .forms import UserProfileForm, ConsumptionForm
+from .models import UserProfile, ConsumptionLog, WeightLog, FoodItem
 
 from .services import search_foods
 
@@ -16,48 +17,48 @@ from .services import search_foods
 def home(request):
     """Home page view - P6 logic. Real data from database"""
     from django.utils import timezone
-    
+
     # Si l'usuari no ha iniciat sessió, enviem-lo a l'HTML perquè vegi el Landing Page
     if not request.user.is_authenticated:
         return render(request, 'nutrieps/home.html', {})
-        
+
     today = timezone.now().date()
-    
+
     # 1. Obtenir les metes de l'usuari (P5)
-    user_goal = 2000 # Valor per defecte
+    user_goal = 2000  # Valor per defecte
     if hasattr(request.user, 'userprofile') and request.user.userprofile.calories_goal:
         user_goal = request.user.userprofile.calories_goal
-         
+
     # 2. Obtenir els registres d'avui de la base de dades
     logs = ConsumptionLog.objects.filter(user=request.user, date=today)
-    
+
     # 3. Sumar calories i macros
     total_calories = 0
     total_protein = 0
     total_carbs = 0
     total_fat = 0
     todays_list = []
-    
+
     for log in logs:
         # Assumim que la informació de l'aliment a FoodItem està en format "per 100 grams"
         factor = log.quantity / 100.0
-        
+
         cals = log.food.calories * factor
         prot = log.food.protein * factor
         carbs = log.food.carbs * factor
         fat = log.food.fat * factor
-        
+
         total_calories += cals
         total_protein += prot
         total_carbs += carbs
         total_fat += fat
-        
+
         todays_list.append({
-            'food': {'name': log.food.name}, 
+            'food': {'name': log.food.name},
             'quantity': log.quantity,
             'calories': round(cals, 1)
         })
-        
+
     calories_remaining = user_goal - total_calories
     if calories_remaining < 0:
         calories_remaining = 0
@@ -119,7 +120,6 @@ def profile(request):
             activity_level = float(form.cleaned_data['activity_level'])
             goal_type = form.cleaned_data.get('goal_type', 'M')
 
-
             # 2. Perform calculations(Mifflin-St Jeor formula)
             if gender == 'M':
                 tmb = (10 * weight) + (6.25 * height) - (5 * age) + 5
@@ -140,16 +140,28 @@ def profile(request):
             user_profile.goal_type = goal_type
             user_profile.weight = weight
             user_profile.height = height
+            user_profile.age = age
+            user_profile.activity_level = activity_level
             user_profile.calories_goal = calculated_calories
             user_profile.save()
+
+            WeightLog.objects.create(
+                user=request.user,
+                weight=weight,
+                date=timezone.now().date()
+            )
 
     else:
         # 1. If user just visiting the page (GET request)
         form = UserProfileForm(
             # Initial information for help user
             initial={
+                'age': user_profile.age,
                 'weight': user_profile.weight,
                 'height': user_profile.height,
+                'gender': user_profile.gender,
+                'activity_level': user_profile.activity_level,
+                'goal_type': user_profile.goal_type,
             }
         )
 
@@ -165,26 +177,24 @@ def profile(request):
     return render(request, 'nutrieps/profile.html', context)
 
 
-from .models import WeightLog
-
 @login_required
 def history(request):
     """History page view - P6 logic. Real data from database"""
-    
+
     # 1. Recuperar tot l'historial de menjars de l'usuari des del més recent al més antic
     logs = ConsumptionLog.objects.filter(user=request.user).select_related('food').order_by('-date')
-    
+
     # Creem la llista tal com demana el Frontend (basant-nos en el mock i agrupant per dia naturalment)
     historical_records = []
     for log in logs:
         cals = (log.food.calories * log.quantity) / 100.0
         historical_records.append({
-            'date': log.date.strftime('%Y-%m-%d'), # Ex: 2026-04-10
+            'date': log.date.strftime('%Y-%m-%d'),  # Ex: 2026-04-10
             'food': {'name': log.food.name},
             'quantity': log.quantity,
             'calories': round(cals, 1)
         })
-        
+
     # 2. Historial de Pes
     weight_logs = WeightLog.objects.filter(user=request.user).order_by('-date')
     weight_history = []
@@ -202,10 +212,6 @@ def history(request):
     return render(request, 'nutrieps/history.html', context)
 
 
-from django.shortcuts import redirect
-from .models import FoodItem
-from .forms import ConsumptionForm
-
 @login_required
 def add_consumption(request):
     """View to handle adding a food item to the consumption log via POST"""
@@ -221,16 +227,17 @@ def add_consumption(request):
                     'fat': form.cleaned_data.get('fat', 0.0) or 0.0
                 }
             )
-            
+
             ConsumptionLog.objects.create(
                 user=request.user,
                 food=food,
                 quantity=form.cleaned_data['quantity']
             )
-            
+
             return redirect('nutrieps:history')
-            
+
     return redirect('nutrieps:search')
+
 
 class SignUpView(CreateView):
     form_class = UserCreationForm

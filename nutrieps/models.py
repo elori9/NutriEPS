@@ -18,6 +18,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)  # Link with the User table
     height = models.FloatField(help_text="Height in cm")  # Attribute
     weight = models.FloatField(help_text="Weight in kg")  # Attribute
+    age = models.IntegerField(help_text="Age in years")  # Attribute
     calories_goal = models.IntegerField(default=2000)  # Attribute
     gender = models.CharField(
         max_length=1,
@@ -31,6 +32,7 @@ class UserProfile(models.Model):
         default='M',
         help_text="User's weight goal"
     )  # Attribute
+    activity_level = models.CharField(default=1.2, help_text="Activity level")  # Attribute
 
     class Meta:
         verbose_name = "User Profile"  # How it shows in the admin panel
