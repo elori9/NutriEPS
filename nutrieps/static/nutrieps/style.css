@@ -298,7 +298,7 @@ body {
 }
 
 .card-header h3 {
-    font-size: 1.1rem;
+    font-size: 1.3rem;
     text-transform: uppercase;
     letter-spacing: 1px;
     color: var(--color-text-gray);
@@ -505,4 +505,149 @@ body {
 
     .top-content p { margin-inline: auto; }
     .master-text h2 { font-size: 3rem; }
+}
+
+/* Hacemos la tarjeta contenedora más suave */
+.modern-card {
+    border-radius: 24px;
+    border: none;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.04);
+}
+
+/* Diseño del formulario en cuadrícula (2 columnas) */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+}
+
+/* Hacemos que el último campo (Nivel de actividad) ocupe el ancho completo */
+.input-group:nth-child(5) {
+    grid-column: span 2;
+}
+
+/* Estilo de los títulos encima de las cajas */
+.modern-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-text-gray);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* LA MAGIA: Cajas de texto y selectores a lo Yazio */
+.modern-form input,
+.modern-form select {
+    width: 100%;
+    background-color: #f3f4f6; /* Fondo gris claro */
+    border: 2px solid transparent; /* Sin borde visible por defecto */
+    padding: 1rem 1.2rem; /* Mucho espacio interior para que sean gorditas */
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-text-dark);
+    border-radius: 16px; /* Esquinas súper redondeadas */
+    outline: none;
+    transition: all 0.2s ease;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+/* Efecto al hacer clic dentro de la caja de texto */
+.modern-form input:focus,
+.modern-form select:focus {
+    background-color: var(--color-white); /* Pasa a blanco */
+    border-color: var(--color-primary-green); /* Borde verde */
+    box-shadow: 0 4px 15px rgba(33, 102, 85, 0.1); /* Resplandor suave */
+}
+
+/* Estilo para el botón tipo píldora que ya tenías */
+.pill-btn {
+    margin-top: 2rem;
+    padding: 1.2rem;
+    font-size: 1.1rem;
+    border-radius: 50px;
+    box-shadow: 0 8px 20px rgba(33, 102, 85, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.pill-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 25px rgba(33, 102, 85, 0.4);
+}
+
+/* =========================================
+   MODERN HISTORY LIST STYLES
+   ========================================= */
+
+   .history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.history-item {
+    display: flex;
+    align-items: center;
+    background-color: #f9fafb;
+    padding: 1rem;
+    border-radius: 18px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.history-item:hover {
+    transform: translateX(5px);
+    background-color: var(--color-white);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.history-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    margin-right: 1rem;
+}
+
+/* Background colors for icons */
+.bg-blue-light { background-color: #eff6ff; color: #3b82f6; }
+
+.history-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.history-name {
+    font-weight: 800;
+    color: var(--color-text-dark);
+}
+
+.history-date {
+    font-size: 0.8rem;
+    color: var(--color-text-gray);
+    font-weight: 600;
+}
+
+/* Rounded pills for the values */
+.amount-pill {
+    font-weight: 800;
+    padding: 0.4rem 0.8rem;
+    border-radius: 12px;
+    font-size: 0.9rem;
+}
+
+.pill-orange { background: #fff7ed; color: var(--color-accent-orange); }
+.pill-blue { background: #eff6ff; color: #3b82f6; }
+
+.empty-msg {
+    text-align: center;
+    color: var(--color-text-gray);
+    padding: 2rem 0;
+    font-weight: 600;
 }

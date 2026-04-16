@@ -1,11 +1,43 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Profile</title>
-</head>
-<body>
-    <h1>Welcome to PROFILE</h1>
-    <p>This is the profile page.</p>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}My Profile - NUTRIEPS{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="dash-greeting">
+        <h2>My Profile 👤</h2>
+        <p>Update your metrics to recalculate your daily calorie goal.</p>
+    </div>
+
+    <div class="dash-summary-grid">
+        <div class="summary-card">
+            <div class="card-header"><h3>Your Current Data</h3></div>
+            <div class="calorie-list" style="font-size: 1.1rem; gap: 1.5rem;">
+                <div class="c-item">Current Weight <span>{{ current_profile.weight }} kg</span></div>
+                <div class="c-item">Height <span>{{ current_profile.height }} cm</span></div>
+                <div class="c-item" style="border-top: 1px solid #eee; padding-top: 1rem;">
+                    Daily Goal <span class="green-txt">{{ current_profile.calories_goal }} kcal</span>
+                </div>
+            </div>
+        </div>
+
+<div class="summary-card modern-card" style="max-width: 100%;">
+            <div class="card-header"><h3 style="margin-bottom: 1.5rem;">Metabolism Calculator</h3></div>
+            <form method="POST" class="modern-form">
+                {% csrf_token %}
+                
+                <div class="form-grid">
+                    {% for field in profile_form %}
+                    <div class="input-group">
+                        <label class="modern-label">{{ field.label }}</label>
+                        {{ field }}
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <button type="submit" class="submit-btn green-btn pill-btn">Calculate My Calories</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

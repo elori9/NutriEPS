@@ -1,11 +1,67 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Home</title>
-</head>
-<body>
-    <h1>Welcome to HISTORY</h1>
-    <p>This is the history page</p>
-</body>
-</html>
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}My History - NUTRIEPS{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="dash-greeting">
+        <h2>My History 📅</h2>
+        <p>Review your food logs and weight progress.</p>
+    </div>
+
+    <div class="dash-summary-grid">
+        
+        <div class="summary-card modern-card">
+            <div class="card-header">
+                <h3><strong>Food Log</strong></h3>
+            </div>
+            
+            {% if historical_records %}
+                <div class="history-list">
+                    {% for record in historical_records %}
+                    <div class="history-item">
+                        <div class="history-icon bg-orange-light">🍕</div>
+                        <div class="history-details">
+                            <span class="history-name">{{ record.food.name }}</span>
+                            <span class="history-date">{{ record.date }}</span>
+                        </div>
+                        <div class="history-amount">
+                            <span class="amount-pill pill-orange">{{ record.quantity }}g</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="empty-msg">No food logged yet.</p>
+            {% endif %}
+        </div>
+
+        <div class="summary-card modern-card">
+            <div class="card-header">
+                <h3><strong>Weight Progress</strong></h3>
+            </div>
+            
+            {% if weight_history %}
+                <div class="history-list">
+                    {% for weight in weight_history %}
+                    <div class="history-item">
+                        <div class="history-icon bg-blue-light">⚖️</div>
+                        <div class="history-details">
+                            <span class="history-name">Weight Check</span>
+                            <span class="history-date">{{ weight.date }}</span>
+                        </div>
+                        <div class="history-amount">
+                            <span class="amount-pill pill-blue">{{ weight.weight }} kg</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="empty-msg">No weight recorded yet.</p>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+{% endblock %}
