@@ -10,11 +10,30 @@
         <p>Review your food logs and weight progress.</p>
     </div>
 
+    <div class="date-navigator modern-card">
+        <button class="icon-btn">◀</button>
+        <div class="date-center">
+            <span class="date-title">Today</span>
+            <span class="date-subtitle">April 16, 2026</span>
+        </div>
+        <button class="icon-btn">▶</button>
+    </div>
+
     <div class="dash-summary-grid">
         
         <div class="summary-card modern-card">
             <div class="card-header">
                 <h3><strong>Food Log</strong></h3>
+            </div>
+
+            <div class="mini-progress-container">
+                <div class="mini-progress-info">
+                    <span>Calories Today</span>
+                    <strong>1450 / 2000 kcal</strong>
+                </div>
+                <div class="mini-progress-bar">
+                    <div class="mini-progress-fill" style="width: 72%;"></div>
+                </div>
             </div>
             
             {% if historical_records %}
@@ -24,7 +43,10 @@
                         <div class="history-icon bg-orange-light">🍕</div>
                         <div class="history-details">
                             <span class="history-name">{{ record.food.name }}</span>
-                            <span class="history-date">{{ record.date }}</span>
+                            <div style="display: flex; gap: 0.5rem; margin-top: 0.3rem;">
+                                <span class="history-date">{{ record.date }}</span>
+                                <span class="meal-tag">Breakfast</span> 
+                            </div>
                         </div>
                         <div class="history-amount">
                             <span class="amount-pill pill-orange">{{ record.quantity }}g</span>
@@ -41,6 +63,17 @@
             <div class="card-header">
                 <h3><strong>Weight Progress</strong></h3>
             </div>
+
+            <div class="weight-goal-summary">
+                <div class="wg-text">
+                    <span class="wg-title">Current Goal</span>
+                    <span class="wg-subtitle">Target: 68.0 kg</span>
+                </div>
+                <div class="wg-remaining">
+                    <strong>3.5 kg</strong>
+                    <span>to go!</span>
+                </div>
+            </div>
             
             {% if weight_history %}
                 <div class="history-list">
@@ -49,10 +82,11 @@
                         <div class="history-icon bg-blue-light">⚖️</div>
                         <div class="history-details">
                             <span class="history-name">Weight Check</span>
-                            <span class="history-date">{{ weight.date }}</span>
+                            <span class="history-date">April 15, 2026</span>
                         </div>
-                        <div class="history-amount">
-                            <span class="amount-pill pill-blue">{{ weight.weight }} kg</span>
+                        <div class="history-amount" style="display: flex; flex-direction: column; align-items: flex-end; gap: 0.3rem;">
+                            <span class="amount-pill pill-blue">71.5 kg</span>
+                            <span class="trend-badge trend-down">▼ 0.5 kg</span>
                         </div>
                     </div>
                     {% endfor %}
