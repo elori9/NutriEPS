@@ -15,4 +15,6 @@ urlpatterns = [
     path('profile/', views.profile, name='profile'),
     # User history
     path('history/', views.history, name='history'),
+    # Add food to consumption log
+    path('add-consumption/', views.add_consumption, name='add_consumption'),
 ]
