@@ -2,12 +2,35 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
 
+
 # UserProfile (Relation 1 to 1 with User)
 class UserProfile(models.Model):
+    WEIGHT_GOAL_CHOICES = [
+        ('L', 'Lose Weight (-300 kcal)'),
+        ('M', 'Maintain Weight'),
+        ('G', 'Gain Muscle (+300 kcal)'),
+    ]
+    GENDER_CHOICES = [
+        ('M', 'Male'),
+        ('F', 'Female'),
+    ]
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)  # Link with the User table
     height = models.FloatField(help_text="Height in cm")  # Attribute
     weight = models.FloatField(help_text="Weight in kg")  # Attribute
     calories_goal = models.IntegerField(default=2000)  # Attribute
+    gender = models.CharField(
+        max_length=1,
+        choices=GENDER_CHOICES,
+        default='M',
+        help_text="Biological sex for BMR calculation"
+    )  # Attribute
+    goal_type = models.CharField(
+        max_length=1,
+        choices=WEIGHT_GOAL_CHOICES,
+        default='M',
+        help_text="User's weight goal"
+    )  # Attribute
 
     class Meta:
         verbose_name = "User Profile"  # How it shows in the admin panel

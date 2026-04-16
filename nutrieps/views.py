@@ -117,6 +117,8 @@ def profile(request):
             weight = form.cleaned_data['weight']
             height = form.cleaned_data['height']
             activity_level = float(form.cleaned_data['activity_level'])
+            goal_type = form.cleaned_data.get('goal_type', 'M')
+
 
             # 2. Perform calculations(Mifflin-St Jeor formula)
             if gender == 'M':
@@ -124,9 +126,18 @@ def profile(request):
             else:
                 tmb = (10 * weight) + (6.25 * height) - (5 * age) - 161
 
-            calculated_calories = round(tmb * activity_level)
+            base_calories = round(tmb * activity_level)
 
-            # 3. Save to database
+            # 3. Calculate the calories
+            if goal_type == 'L':
+                calculated_calories = base_calories - 300
+            elif goal_type == 'G':
+                calculated_calories = base_calories + 300
+            else:
+                calculated_calories = base_calories
+
+            # 4. Save to database
+            user_profile.goal_type = goal_type
             user_profile.weight = weight
             user_profile.height = height
             user_profile.calories_goal = calculated_calories
