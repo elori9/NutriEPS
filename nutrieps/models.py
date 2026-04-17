@@ -16,9 +16,9 @@ class UserProfile(models.Model):
     ]
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)  # Link with the User table
-    height = models.FloatField(help_text="Height in cm")  # Attribute
-    weight = models.FloatField(help_text="Weight in kg")  # Attribute
-    age = models.IntegerField(help_text="Age in years")  # Attribute
+    height = models.FloatField(default=0.0, help_text="Height in cm")  # Attribute
+    weight = models.FloatField(default=0.0, help_text="Weight in kg")  # Attribute
+    age = models.IntegerField(default=18, help_text="Age in years")  # Attribute
     calories_goal = models.IntegerField(default=2000)  # Attribute
     gender = models.CharField(
         max_length=1,
