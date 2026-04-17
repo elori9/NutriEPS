@@ -1,3 +1,5 @@
+from os import name
+
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
@@ -84,10 +86,21 @@ def search(request):
     error_message = None
 
     if search_term:
-        try:
-            api_results = search_foods(search_term)
-        except Exception:
-            error_message = f"Couldn't connect to the food database: {search_term}, try again later."
+        local_food = FoodItem.objects.filter(name__icontains=search_term)
+        if local_food.exists():
+            for food in local_food:
+                api_results.append({
+                    'name':food.name,
+                    'calories':food.calories,
+                    'protein': food.protein,
+                    'carbs': food.carbs,
+                    'fat':food.fat
+                })
+        else:
+            try:
+                api_results = search_foods(search_term)
+            except Exception:
+                error_message = f"Couldn't connect to the food database: {search_term}, try again later."
 
     context = {
         'search_term': search_term,
