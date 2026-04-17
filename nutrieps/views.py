@@ -202,6 +202,7 @@ def history(request):
     for log in logs:
         cals = (log.food.calories * log.quantity) / 100.0
         historical_records.append({
+            'id': log.id,
             'date': log.date.strftime('%Y-%m-%d'),  # Ex: 2026-04-10
             'food': {'name': log.food.name},
             'quantity': log.quantity,
@@ -217,10 +218,24 @@ def history(request):
             'weight': w_log.weight
         })
 
+    # 3. Calories d'avui
+    today = timezone.now().date()
+    todays_logs = ConsumptionLog.objects.filter(user=request.user, date=today).select_related('food')
+    total_calories_today = sum((log.food.calories * log.quantity) / 100.0 for log in todays_logs)
+    
+    user_goal = 2000
+    if hasattr(request.user, 'userprofile') and request.user.userprofile.calories_goal:
+        user_goal = request.user.userprofile.calories_goal
+        
+    calories_pct = min(100, int((total_calories_today / user_goal) * 100)) if user_goal > 0 else 0
+
     # 4. Passar el diccionari al FrontEnd
     context = {
         'historical_records': historical_records,
-        'weight_history': weight_history
+        'weight_history': weight_history,
+        'calories_today': round(total_calories_today),
+        'calories_goal': round(user_goal),
+        'calories_pct': calories_pct
     }
     return render(request, 'nutrieps/history.html', context)
 
@@ -250,6 +265,16 @@ def add_consumption(request):
             return redirect('nutrieps:history')
 
     return redirect('nutrieps:search')
+
+
+@login_required
+def delete_consumption(request, log_id):
+    """View to delete a consumption log"""
+    if request.method == 'POST':
+        log = ConsumptionLog.objects.filter(id=log_id, user=request.user).first()
+        if log:
+            log.delete()
+    return redirect('nutrieps:history')
 
 
 class SignUpView(CreateView):

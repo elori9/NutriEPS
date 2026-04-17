@@ -20,7 +20,7 @@
     </div>
 
     <div class="dash-summary-grid">
-        
+
         <div class="summary-card modern-card">
             <div class="card-header">
                 <h3><strong>Food Log</strong></h3>
@@ -29,33 +29,37 @@
             <div class="mini-progress-container">
                 <div class="mini-progress-info">
                     <span>Calories Today</span>
-                    <strong>1450 / 2000 kcal</strong>
+                    <strong>{{ calories_today }} / {{ calories_goal }} kcal</strong>
                 </div>
                 <div class="mini-progress-bar">
-                    <div class="mini-progress-fill" style="width: 72%;"></div>
+                    <div class="mini-progress-fill" style="width: {{ calories_pct }}%;"></div>
                 </div>
             </div>
-            
+
             {% if historical_records %}
-                <div class="history-list">
-                    {% for record in historical_records %}
-                    <div class="history-item">
-                        <div class="history-icon bg-orange-light">🍕</div>
-                        <div class="history-details">
-                            <span class="history-name">{{ record.food.name }}</span>
-                            <div style="display: flex; gap: 0.5rem; margin-top: 0.3rem;">
-                                <span class="history-date">{{ record.date }}</span>
-                                <span class="meal-tag">Breakfast</span> 
-                            </div>
-                        </div>
-                        <div class="history-amount">
-                            <span class="amount-pill pill-orange">{{ record.quantity }}g</span>
+            <div class="history-list">
+                {% for record in historical_records %}
+                <div class="history-item">
+                    <div class="history-icon bg-orange-light">🍕</div>
+                    <div class="history-details">
+                        <span class="history-name">{{ record.food.name }}</span>
+                        <div style="display: flex; gap: 0.5rem; margin-top: 0.3rem;">
+                            <span class="history-date">{{ record.date }}</span>
+                            <span class="meal-tag">Breakfast</span>
                         </div>
                     </div>
-                    {% endfor %}
+                    <div class="history-amount" style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span class="amount-pill pill-orange">{{ record.quantity }}g</span>
+                        <form method="POST" action="{% url 'nutrieps:delete_consumption' record.id %}" style="display:inline; margin:0; padding:0;">
+                            {% csrf_token %}
+                            <button type="submit" style="color: red; border: none; background: transparent; cursor: pointer; font-size: 1.2rem; padding: 0.2rem;" title="Delete">🗑️</button>
+                        </form>
+                    </div>
                 </div>
+                {% endfor %}
+            </div>
             {% else %}
-                <p class="empty-msg">No food logged yet.</p>
+            <p class="empty-msg">No food logged yet.</p>
             {% endif %}
         </div>
 
@@ -74,25 +78,26 @@
                     <span>to go!</span>
                 </div>
             </div>
-            
+
             {% if weight_history %}
-                <div class="history-list">
-                    {% for weight in weight_history %}
-                    <div class="history-item">
-                        <div class="history-icon bg-blue-light">⚖️</div>
-                        <div class="history-details">
-                            <span class="history-name">Weight Check</span>
-                            <span class="history-date">April 15, 2026</span>
-                        </div>
-                        <div class="history-amount" style="display: flex; flex-direction: column; align-items: flex-end; gap: 0.3rem;">
-                            <span class="amount-pill pill-blue">71.5 kg</span>
-                            <span class="trend-badge trend-down">▼ 0.5 kg</span>
-                        </div>
+            <div class="history-list">
+                {% for weight in weight_history %}
+                <div class="history-item">
+                    <div class="history-icon bg-blue-light">⚖️</div>
+                    <div class="history-details">
+                        <span class="history-name">Weight Check</span>
+                        <span class="history-date">April 15, 2026</span>
                     </div>
-                    {% endfor %}
+                    <div class="history-amount"
+                        style="display: flex; flex-direction: column; align-items: flex-end; gap: 0.3rem;">
+                        <span class="amount-pill pill-blue">71.5 kg</span>
+                        <span class="trend-badge trend-down">▼ 0.5 kg</span>
+                    </div>
                 </div>
+                {% endfor %}
+            </div>
             {% else %}
-                <p class="empty-msg">No weight recorded yet.</p>
+            <p class="empty-msg">No weight recorded yet.</p>
             {% endif %}
         </div>
 
