@@ -1,0 +1,139 @@
+/* Grid layout for the form (2 equal columns) */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+}
+
+/* Make Activity Level fields span the full width */
+.input-group:nth-child(5),
+.input-group:nth-child(6) {
+    grid-column: span 2;
+}
+
+/* Styling for the labels/titles above the input fields */
+.modern-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-text-gray);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Inputs and select dropdowns */
+.modern-form input,
+.modern-form select {
+    width: 100%;
+    background-color: #f3f4f6; /* Light gray background */
+    border: 2px solid transparent; /* Hidden border by default */
+    padding: 1rem 1.2rem; /* Ample inner spacing for a bulky look */
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-text-dark);
+    border-radius: 16px; /* Highly rounded corners */
+    outline: none;
+    transition: all 0.2s ease;
+    -webkit-appearance: none; /* Remove default browser styling */
+    appearance: none;
+}
+
+/* Focus effect when clicking inside an input/select */
+.modern-form input:focus,
+.modern-form select:focus {
+    background-color: var(--color-white); /* Changes to white */
+    border-color: var(--color-primary-green); /* Green border */
+    box-shadow: 0 4px 15px rgba(33, 102, 85, 0.1); /* Soft green glow */
+}
+
+/* Pill-shaped submit button styling */
+.pill-btn {
+    margin-top: 2rem;
+    padding: 1.2rem;
+    font-size: 1.1rem;
+    border-radius: 50px;
+    box-shadow: 0 8px 20px rgba(33, 102, 85, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Hover effect for the pill button */
+.pill-btn:hover {
+    transform: translateY(-3px); /* Slight lift effect */
+    box-shadow: 0 12px 25px rgba(33, 102, 85, 0.4); /* Stronger shadow */
+}
+
+/* =========================================
+   PROFILE HEADER & LOGOUT
+   ========================================= */
+
+/* Header container aligning title (left) and logout button (right) */
+.profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3rem;
+}
+
+/* Large, high-contrast logout button (Default state) */
+.logout-door-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;                  /* Spacing between icon and text */
+    background-color: #fef2f2;    /* Very light red background */
+    color: #dc2626;               /* Dark red text for high contrast */
+    border: 2px solid #fca5a5;    /* Soft red border to define shape */
+    padding: 0.8rem 1.5rem;       /* Wider and taller padding */
+    border-radius: 16px;          /* Rounded corners */
+    font-weight: 800;             /* Extra bold text */
+    font-size: 1.05rem;           /* Larger font size */
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Intense red state when hovering over the logout button */
+.logout-door-btn:hover {
+    background-color: #ef4444; 
+    border-color: #ef4444;
+    color: var(--color-white); 
+    box-shadow: 0 8px 20px rgba(239, 68, 68, 0.35); /* Pronounced red shadow */
+    transform: translateY(-3px); /* Slight lift effect */
+}
+
+/* =========================================
+   ACCOUNT STATUS SECTION (Punto 3)
+   ========================================= */
+.account-status-section {
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid #f3f4f6;
+}
+
+.status-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.status-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-text-gray);
+}
+
+.status-value {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--color-text-dark);
+}
+
+.active-badge {
+    background: #dcfce7;
+    color: #166534;
+    padding: 0.2rem 0.6rem;
+    border-radius: 50px;
+    font-size: 0.7rem;
+    font-weight: 900;
+}

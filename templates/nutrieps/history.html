@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% load static %}
-
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'nutrieps/history.css' %}">
+{% endblock %}
 {% block title %}My History - NUTRIEPS{% endblock %}
 
 {% block content %}
@@ -14,7 +16,7 @@
         <button class="icon-btn">◀</button>
         <div class="date-center">
             <span class="date-title">Today</span>
-            <span class="date-subtitle">April 16, 2026</span>
+            <span class="date-subtitle">{% now "F j, Y" %}</span>
         </div>
         <button class="icon-btn">▶</button>
     </div>
@@ -40,12 +42,10 @@
             <div class="history-list">
                 {% for record in historical_records %}
                 <div class="history-item">
-                    <div class="history-icon bg-orange-light">🍕</div>
                     <div class="history-details">
                         <span class="history-name">{{ record.food.name }}</span>
                         <div style="display: flex; gap: 0.5rem; margin-top: 0.3rem;">
                             <span class="history-date">{{ record.date }}</span>
-                            <span class="meal-tag">Breakfast</span>
                         </div>
                     </div>
                     <div class="history-amount" style="display: flex; align-items: center; gap: 0.5rem;">
@@ -79,19 +79,17 @@
                 </div>
             </div>
 
-            {% if weight_history %}
+           {% if weight_history %}
             <div class="history-list">
                 {% for weight in weight_history %}
                 <div class="history-item">
-                    <div class="history-icon bg-blue-light">⚖️</div>
                     <div class="history-details">
                         <span class="history-name">Weight Check</span>
-                        <span class="history-date">April 15, 2026</span>
+                        <span class="history-date">{{ weight.date }}</span>
                     </div>
                     <div class="history-amount"
                         style="display: flex; flex-direction: column; align-items: flex-end; gap: 0.3rem;">
-                        <span class="amount-pill pill-blue">71.5 kg</span>
-                        <span class="trend-badge trend-down">▼ 0.5 kg</span>
+                        <span class="amount-pill pill-blue">{{ weight.weight }} kg</span>
                     </div>
                 </div>
                 {% endfor %}

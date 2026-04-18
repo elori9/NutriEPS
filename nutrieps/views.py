@@ -132,6 +132,7 @@ def profile(request):
             height = form.cleaned_data['height']
             activity_level = float(form.cleaned_data['activity_level'])
             goal_type = form.cleaned_data.get('goal_type', 'M')
+            
 
             # 2. Perform calculations(Mifflin-St Jeor formula)
             if gender == 'M':
@@ -178,12 +179,23 @@ def profile(request):
             }
         )
 
+    member_since = request.user.date_joined.strftime('%B %Y') 
+
+    last_weight_log = WeightLog.objects.filter(user=request.user).order_by('-date').first()
+    
+    if last_weight_log:
+        last_update = last_weight_log.date.strftime('%d/%m/%Y')
+    else:
+        last_update = "Never"
+
     context = {
         'profile_form': form,
         'current_profile': {
             'weight': user_profile.weight,
             'height': user_profile.height,
-            'calories_goal': user_profile.calories_goal
+            'calories_goal': user_profile.calories_goal,
+            'member_since': member_since,
+            'last_update': last_update
         }
     }
 

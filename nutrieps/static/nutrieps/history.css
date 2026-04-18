@@ -1,0 +1,373 @@
+/* Main container for the list of history items */
+.history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+/* Individual history item card (food or weight) */
+.history-item {
+    display: flex;
+    align-items: center;
+    background-color: #f9fafb; /* Light gray background */
+    padding: 1rem;
+    border-radius: 18px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Hover effect: slight lift and shadow to make it feel interactive */
+.history-item:hover {
+    transform: translateX(5px);
+    background-color: var(--color-white);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+/* Icon container for each history item (pizza, scale, etc.) */
+.history-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    margin-right: 1rem;
+}
+
+/* Background colors for specific icons */
+.bg-blue-light { background-color: #eff6ff; color: #3b82f6; }
+
+/* Text details container (Name, Date, etc.) */
+.history-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Item name (e.g., "Apple", "Weight Check") */
+.history-name {
+    font-weight: 800;
+    color: var(--color-text-dark);
+}
+
+/* Item date or timestamp */
+.history-date {
+    font-size: 0.8rem;
+    color: var(--color-text-gray);
+    font-weight: 600;
+}
+
+/* Message displayed when there are no logs */
+.empty-msg {
+    text-align: center;
+    color: var(--color-text-gray);
+    padding: 2rem 0;
+    font-weight: 600;
+}
+
+/* Rounded pill indicators for amounts (e.g., 200g, 70kg) */
+.amount-pill {
+    font-weight: 800;
+    padding: 0.4rem 0.8rem;
+    border-radius: 12px;
+    font-size: 0.9rem;
+}
+
+/* Pill color variants */
+.pill-orange { background: #fff7ed; color: var(--color-accent-orange); }
+.pill-blue { background: #eff6ff; color: #3b82f6; }
+
+/* Meal classification tags (e.g., Breakfast, Lunch) */
+.meal-tag {
+    background-color: #fce7f3;
+    color: #db2777;
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 0.1rem 0.6rem;
+    border-radius: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+
+/* Mini Progress Bar for daily calorie tracking */
+.mini-progress-container {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px dashed #e5e7eb;
+}
+
+/* Text above the progress bar */
+.mini-progress-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: var(--color-text-gray);
+    margin-bottom: 0.5rem;
+}
+
+.mini-progress-info strong {
+    color: var(--color-text-dark);
+}
+
+/* The background track of the progress bar */
+.mini-progress-bar {
+    width: 100%;
+    height: 8px;
+    background-color: #f3f4f6;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* The filled portion of the progress bar */
+.mini-progress-fill {
+    height: 100%;
+    background-color: var(--color-primary-green);
+    border-radius: 10px;
+}
+
+/* Date Navigator (Previous/Next day controls) */
+.date-navigator {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    margin-bottom: 2rem;
+    background: var(--color-white);
+}
+
+/* Arrow buttons for navigation */
+.icon-btn {
+    background: #f3f4f6;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    cursor: pointer;
+    color: var(--color-text-dark);
+    font-size: 1.2rem;
+    transition: all 0.2s ease;
+}
+
+.icon-btn:hover {
+    background: var(--color-primary-green);
+    color: var(--color-white);
+}
+
+/* Center text for the currently selected date */
+.date-center {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.date-title {
+    font-weight: 800;
+    font-size: 1.2rem;
+    color: var(--color-text-dark);
+}
+
+.date-subtitle {
+    font-size: 0.85rem;
+    color: var(--color-text-gray);
+    font-weight: 600;
+}
+
+
+/* Weight Goal Summary Card (Gradient background) */
+.weight-goal-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    padding: 1.2rem;
+    border-radius: 18px;
+    margin-bottom: 2rem;
+    border: 1px solid #bae6fd;
+    box-shadow: 0 4px 15px rgba(56, 189, 248, 0.1);
+    gap: 1rem;
+}
+
+.wg-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.wg-title {
+    font-weight: 800;
+    color: #0369a1;
+    font-size: 1.05rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.wg-subtitle {
+    font-size: 0.85rem;
+    color: #0284c7;
+    font-weight: 700;
+    background: var(--color-white);
+    padding: 0.3rem 0.8rem;
+    border-radius: 10px;
+    display: inline-block;
+    width: fit-content;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+}
+
+/* Remaining weight box layout */
+.wg-remaining {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    background: var(--color-white);
+    padding: 0.6rem 1rem;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(2, 132, 199, 0.12);
+    border: 2px solid #ffffff;
+    transition: transform 0.2s ease;
+}
+
+.wg-remaining:hover {
+    transform: translateY(-3px);
+}
+
+.wg-remaining strong {
+    color: #0284c7;
+    font-size: 1.4rem;
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 0.2rem;
+}
+
+.wg-remaining span {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: #64748b;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+/* Weight Trend Badges (Up/Down/Neutral) */
+.trend-badge {
+    font-size: 0.75rem;
+    font-weight: 800;
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+}
+
+.trend-down { background-color: #dcfce7; color: #166534; /* Weight loss (Success) */ }
+.trend-up { background-color: #fee2e2; color: #991b1b; /* Weight gain (Warning) */ }
+.trend-neutral { background-color: #f3f4f6; color: #4b5563; /* No change */ }
+
+/* Container for date and meal tag */
+.history-subtitle {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.3rem;
+    align-items: center;
+}
+
+/* Flex row alignment for food amounts and delete button */
+.amount-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Flex column alignment for weight amounts and trend badge */
+.amount-col {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.3rem;
+}
+
+/* Trash bin icon button for deleting history entries */
+.delete-icon-btn {
+    color: #ef4444; /* Danger red */
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 0.3rem;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.delete-icon-btn:hover {
+    background-color: #fef2f2;
+    transform: scale(1.1); /* Slight pop effect on hover */
+}
+
+.weight-goal-summary {
+    background: var(--color-white);
+    padding: 1.5rem;
+    border-radius: 20px;
+    margin-bottom: 2rem;
+    border: 1px solid var(--color-border);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+}
+
+.wg-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.2rem;
+    padding-bottom: 1.2rem;
+    border-bottom: 1px dashed #e5e7eb; /* Línea separadora sutil */
+}
+
+.wg-title {
+    font-weight: 800;
+    color: var(--color-text-dark);
+    font-size: 1.1rem;
+}
+
+.wg-target-pill {
+    background: #eff6ff;
+    color: #3b82f6;
+    padding: 0.3rem 0.8rem;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+/* Grid minimalista para los datos */
+.wg-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    text-align: center;
+}
+
+.wg-stat-box {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+/* Bordes para separar los bloques de datos central */
+.wg-stat-box.center-box {
+    border-left: 1px solid #e5e7eb;
+    border-right: 1px solid #e5e7eb;
+}
+
+.wg-stat-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: var(--color-text-gray);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.wg-stat-value {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--color-text-dark);
+}
+
+/* Resaltamos en azul el peso que nos falta */
+.wg-stat-value.highlight {
+    color: #3b82f6;
+}
+
