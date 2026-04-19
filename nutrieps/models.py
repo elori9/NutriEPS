@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
+from django.utils import timezone
 
 
 # UserProfile (Relation 1 to 1 with User)
@@ -50,7 +51,7 @@ class UserProfile(models.Model):
 class WeightLog(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)  # Link with the User table
     weight = models.FloatField(help_text="Weight in kg")  # Attribute
-    date = models.DateField(auto_now_add=True)  # Automatically set to today
+    date = models.DateField(default=timezone.now)  # Editable today's date
 
     class Meta:
         ordering = ['-date']  # Orders from newest to oldest
@@ -81,7 +82,7 @@ class FoodItem(models.Model):
 class ConsumptionLog(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)  # Link with the User table
     food = models.ForeignKey(FoodItem, on_delete=models.CASCADE)  # Link with the FoodItem table
-    date = models.DateField(auto_now_add=True)  # Automatically set to today
+    date = models.DateField(default=timezone.now)  # Editable today's date
     quantity = models.FloatField(help_text="Quantity in grams")  # Attribute
 
     class Meta:

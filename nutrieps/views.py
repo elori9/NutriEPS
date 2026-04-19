@@ -210,22 +210,39 @@ def profile(request):
 def history(request):
     """History page view - P6 logic. Real data from database"""
 
-    # 1. Recuperar tot l'historial de menjars de l'usuari des del més recent al més antic
-    logs = ConsumptionLog.objects.filter(user=request.user).select_related('food').order_by('-date')
+    # Navigació per dates: Mirem si l'usuari ha demanat un dia concret per URL
+    from datetime import datetime, timedelta
 
-    # Creem la llista tal com demana el Frontend (basant-nos en el mock i agrupant per dia naturalment)
+    date_str = request.GET.get('date')
+    if date_str:
+        try:
+            target_date = datetime.strptime(date_str, '%Y-%m-%d').date()
+        except ValueError:
+            target_date = timezone.now().date()
+    else:
+        target_date = timezone.now().date()
+
+    prev_date = target_date - timedelta(days=1)
+    next_date = target_date + timedelta(days=1)
+    is_today = (target_date == timezone.now().date())
+
+    # 1. Recuperar l'historial de menjars del dia seleccionat
+    logs = ConsumptionLog.objects.filter(user=request.user, date=target_date).select_related('food').order_by('-id')
+
     historical_records = []
+    total_calories_target_date = 0
     for log in logs:
         cals = (log.food.calories * log.quantity) / 100.0
+        total_calories_target_date += cals
         historical_records.append({
             'id': log.id,
-            'date': log.date.strftime('%Y-%m-%d'),  # Ex: 2026-04-10
+            'date': log.date.strftime('%Y-%m-%d'),
             'food': {'name': log.food.name},
             'quantity': log.quantity,
             'calories': round(cals, 1)
         })
 
-    # 2. Historial de Pes
+    # 2. Historial de Pes (Global)
     weight_logs = WeightLog.objects.filter(user=request.user).order_by('-date')
     weight_history = []
     for w_log in weight_logs:
@@ -234,11 +251,7 @@ def history(request):
             'weight': w_log.weight
         })
 
-    # 3. Calories d'avui
-    today = timezone.now().date()
-    todays_logs = ConsumptionLog.objects.filter(user=request.user, date=today).select_related('food')
-    total_calories_today = sum((log.food.calories * log.quantity) / 100.0 for log in todays_logs)
-    
+    # 3. Càlculs d'objectius per al dia seleccionat i dades per al Weight Progress
     user_goal = 2000
     target_weight = 0.0
     weight_to_go = 0.0
@@ -249,17 +262,21 @@ def history(request):
             current_weight = weight_logs.first().weight
             weight_to_go = round(abs(current_weight - target_weight), 1)
         
-    calories_pct = min(100, int((total_calories_today / user_goal) * 100)) if user_goal > 0 else 0
+    calories_pct = min(100, int((total_calories_target_date / user_goal) * 100)) if user_goal > 0 else 0
 
-    # 4. Passar el diccionari al FrontEnd
+    # 4. Passar variables al context
     context = {
         'historical_records': historical_records,
         'weight_history': weight_history,
-        'calories_today': round(total_calories_today),
+        'calories_today': round(total_calories_target_date),
         'calories_goal': round(user_goal),
         'calories_pct': calories_pct,
         'target_weight': target_weight,
-        'weight_to_go': weight_to_go
+        'weight_to_go': weight_to_go,
+        'target_date': target_date,
+        'prev_date': prev_date.strftime('%Y-%m-%d'),
+        'next_date': next_date.strftime('%Y-%m-%d'),
+        'is_today': is_today
     }
     return render(request, 'nutrieps/history.html', context)
 

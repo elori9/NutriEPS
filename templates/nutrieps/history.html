@@ -13,12 +13,12 @@
     </div>
 
     <div class="date-navigator modern-card">
-        <button class="icon-btn">◀</button>
+        <a href="?date={{ prev_date }}" class="icon-btn" style="text-decoration:none; display:flex; align-items:center; justify-content:center;">◀</a>
         <div class="date-center">
-            <span class="date-title">Today</span>
-            <span class="date-subtitle">{% now "F j, Y" %}</span>
+            <span class="date-title">{% if is_today %}Today{% else %}{{ target_date|date:'l' }}{% endif %}</span>
+            <span class="date-subtitle">{{ target_date|date:"F j, Y" }}</span>
         </div>
-        <button class="icon-btn">▶</button>
+        <a href="{% if is_today %}#{% else %}?date={{ next_date }}{% endif %}" class="icon-btn" style="text-decoration:none; display:flex; align-items:center; justify-content:center; {% if is_today %}opacity: 0.3; cursor: not-allowed;{% endif %}">▶</a>
     </div>
 
     <div class="dash-summary-grid">
