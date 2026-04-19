@@ -45,7 +45,7 @@ To run it:
    docker compose up --build
    ```
    
-4. Apply the migrations
+4. Apply the migrations (not necessary because dockerfile does them)
    ```bash
    docker compose exec web uv run python manage.py makemigrations
    docker compose exec web uv run python manage.py migrate
@@ -59,3 +59,5 @@ To run it:
 6. You can access to it on: 
 - Web: http://localhost:8000
 - Admin Panel: http://localhost:8000/admin
+- Deployed on: https://nutrieps.onrender.com/ 
+(may take some time to load if the instance is off, because we are using the free plan)
