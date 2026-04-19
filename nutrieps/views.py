@@ -132,7 +132,7 @@ def profile(request):
             height = form.cleaned_data['height']
             activity_level = float(form.cleaned_data['activity_level'])
             goal_type = form.cleaned_data.get('goal_type', 'M')
-            
+            target_weight = form.cleaned_data.get('target_weight') or weight
 
             # 2. Perform calculations(Mifflin-St Jeor formula)
             if gender == 'M':
@@ -153,16 +153,18 @@ def profile(request):
             # 4. Save to database
             user_profile.goal_type = goal_type
             user_profile.weight = weight
+            user_profile.target_weight = target_weight
             user_profile.height = height
             user_profile.age = age
             user_profile.activity_level = activity_level
             user_profile.calories_goal = calculated_calories
             user_profile.save()
 
-            WeightLog.objects.create(
+            # 5. Guardem un únic pes diari per evitar registres duplicats el mateix dia
+            WeightLog.objects.update_or_create(
                 user=request.user,
-                weight=weight,
-                date=timezone.now().date()
+                date=timezone.now().date(),
+                defaults={'weight': weight}
             )
 
     else:
@@ -172,6 +174,7 @@ def profile(request):
             initial={
                 'age': user_profile.age,
                 'weight': user_profile.weight,
+                'target_weight': user_profile.target_weight,
                 'height': user_profile.height,
                 'gender': user_profile.gender,
                 'activity_level': user_profile.activity_level,
@@ -192,6 +195,7 @@ def profile(request):
         'profile_form': form,
         'current_profile': {
             'weight': user_profile.weight,
+            'target_weight': user_profile.target_weight,
             'height': user_profile.height,
             'calories_goal': user_profile.calories_goal,
             'member_since': member_since,
@@ -236,8 +240,14 @@ def history(request):
     total_calories_today = sum((log.food.calories * log.quantity) / 100.0 for log in todays_logs)
     
     user_goal = 2000
-    if hasattr(request.user, 'userprofile') and request.user.userprofile.calories_goal:
-        user_goal = request.user.userprofile.calories_goal
+    target_weight = 0.0
+    weight_to_go = 0.0
+    if hasattr(request.user, 'userprofile'):
+        user_goal = request.user.userprofile.calories_goal or 2000
+        target_weight = request.user.userprofile.target_weight
+        if weight_logs.exists() and target_weight > 0:
+            current_weight = weight_logs.first().weight
+            weight_to_go = round(abs(current_weight - target_weight), 1)
         
     calories_pct = min(100, int((total_calories_today / user_goal) * 100)) if user_goal > 0 else 0
 
@@ -247,7 +257,9 @@ def history(request):
         'weight_history': weight_history,
         'calories_today': round(total_calories_today),
         'calories_goal': round(user_goal),
-        'calories_pct': calories_pct
+        'calories_pct': calories_pct,
+        'target_weight': target_weight,
+        'weight_to_go': weight_to_go
     }
     return render(request, 'nutrieps/history.html', context)
 

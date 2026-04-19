@@ -25,6 +25,7 @@ class UserProfileForm(forms.Form):
     gender = forms.ChoiceField(choices=GENDER_CHOICES, label="Gender")
     age = forms.IntegerField(label="Age", min_value=10, max_value=120)
     weight = forms.FloatField(label="Weight (kg)", min_value=30.0, max_value=300.0)
+    target_weight = forms.FloatField(label="Target Weight (kg)", min_value=30.0, max_value=300.0, required=False)
     height = forms.FloatField(label="Height (cm)", min_value=100.0, max_value=250.0)
     activity_level = forms.ChoiceField(choices=ACTIVITY_CHOICES, label="Activity level")
     goal_type = forms.ChoiceField(choices=WEIGHT_GOAL_CHOICES, label='Weight goal type')
