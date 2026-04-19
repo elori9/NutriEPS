@@ -7,7 +7,8 @@
 
 /* Make Activity Level fields span the full width */
 .input-group:nth-child(5),
-.input-group:nth-child(6) {
+.input-group:nth-child(6),
+.input-group:nth-child(7) {
     grid-column: span 2;
 }
 
@@ -80,23 +81,23 @@
 .logout-door-btn {
     display: flex;
     align-items: center;
-    gap: 0.6rem;                  /* Spacing between icon and text */
-    background-color: #fef2f2;    /* Very light red background */
-    color: #dc2626;               /* Dark red text for high contrast */
-    border: 2px solid #fca5a5;    /* Soft red border to define shape */
-    padding: 0.8rem 1.5rem;       /* Wider and taller padding */
-    border-radius: 16px;          /* Rounded corners */
-    font-weight: 800;             /* Extra bold text */
-    font-size: 1.05rem;           /* Larger font size */
+    gap: 0.6rem; /* Spacing between icon and text */
+    background-color: #fef2f2; /* Very light red background */
+    color: #dc2626; /* Dark red text for high contrast */
+    border: 2px solid #fca5a5; /* Soft red border to define shape */
+    padding: 0.8rem 1.5rem; /* Wider and taller padding */
+    border-radius: 16px; /* Rounded corners */
+    font-weight: 800; /* Extra bold text */
+    font-size: 1.05rem; /* Larger font size */
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
 /* Intense red state when hovering over the logout button */
 .logout-door-btn:hover {
-    background-color: #ef4444; 
+    background-color: #ef4444;
     border-color: #ef4444;
-    color: var(--color-white); 
+    color: var(--color-white);
     box-shadow: 0 8px 20px rgba(239, 68, 68, 0.35); /* Pronounced red shadow */
     transform: translateY(-3px); /* Slight lift effect */
 }
@@ -136,4 +137,17 @@
     border-radius: 50px;
     font-size: 0.7rem;
     font-weight: 900;
+}
+
+/* =========================================
+   SCREEN DIVISION
+   ========================================= */
+@media (min-width: 992px) {
+    /* Redistribute the screen to 40% left and 60 % right dates to fill in all info */
+    .dash-summary-grid {
+        display: grid;
+        grid-template-columns: 4.5fr 5.5fr;
+        gap: 2.5rem;
+        align-items: start;
+    }
 }
