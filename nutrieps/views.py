@@ -77,7 +77,7 @@ def home(request):
     }
     return render(request, 'nutrieps/home.html', context)
 
-
+@login_required
 def search(request):
     """Search page view - P4 logic with real API data."""
 
