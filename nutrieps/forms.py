@@ -1,5 +1,9 @@
 # nutrieps/forms.py
 from django import forms
+from django.forms import ModelForm
+
+from nutrieps.models import ConsumptionLog
+
 
 class UserProfileForm(forms.Form):
     # Activity level options (for Harris-Benedict / Mifflin-St Jeor formula)
@@ -31,10 +35,7 @@ class UserProfileForm(forms.Form):
     goal_type = forms.ChoiceField(choices=WEIGHT_GOAL_CHOICES, label='Weight goal type')
 
 
-class ConsumptionForm(forms.Form):
-    food_name = forms.CharField(max_length=200)
-    calories = forms.FloatField()
-    protein = forms.FloatField(required=False, initial=0)
-    carbs = forms.FloatField(required=False, initial=0)
-    fat = forms.FloatField(required=False, initial=0)
-    quantity = forms.FloatField(min_value=1, label="Quantity (g)")
+class ConsumptionForm(ModelForm):
+    class Meta:
+        model = ConsumptionLog
+        exclude = ('user', 'date',)
