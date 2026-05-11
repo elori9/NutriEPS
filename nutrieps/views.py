@@ -15,7 +15,7 @@ from .services import search_foods
 
 
 from django.core.exceptions import PermissionDenied
-from django.views.generic.edit import UpdateView
+from django.views.generic.edit import UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
@@ -310,17 +310,8 @@ def add_consumption(request):
 
             return redirect('nutrieps:history')
 
+
     return redirect('nutrieps:search')
-
-
-@login_required
-def delete_consumption(request, log_id):
-    """View to delete a consumption log"""
-    if request.method == 'POST':
-        log = ConsumptionLog.objects.filter(id=log_id, user=request.user).first()
-        if log:
-            log.delete()
-    return redirect('nutrieps:history')
 
 
 class SignUpView(CreateView):
@@ -336,6 +327,13 @@ class CheckIsOwnerMixin:
         if obj.user != request.user:
             raise PermissionDenied("You do not have permission to edit this log.")
         return super().dispatch(request, *args, **kwargs)
+
+
+class ConsumptionDeleteView(LoginRequiredMixin, CheckIsOwnerMixin, DeleteView):
+    """View to delete a consumption log with confirmation screen."""
+    model = ConsumptionLog
+    template_name = 'nutrieps/consumptionlog_confirm_delete.html'
+    success_url = reverse_lazy('nutrieps:history')
 
 
 class ConsumptionUpdateView(LoginRequiredMixin, CheckIsOwnerMixin, UpdateView):

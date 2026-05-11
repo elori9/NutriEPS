@@ -1,8 +1,5 @@
 # nutrieps/forms.py
 from django import forms
-from django.forms import ModelForm
-
-from nutrieps.models import ConsumptionLog
 
 
 class UserProfileForm(forms.Form):
@@ -35,7 +32,10 @@ class UserProfileForm(forms.Form):
     goal_type = forms.ChoiceField(choices=WEIGHT_GOAL_CHOICES, label='Weight goal type')
 
 
-class ConsumptionForm(ModelForm):
-    class Meta:
-        model = ConsumptionLog
-        exclude = ('user', 'date',)
+class ConsumptionForm(forms.Form):
+    food_name = forms.CharField(max_length=200)
+    calories = forms.FloatField()
+    protein = forms.FloatField(required=False)
+    carbs = forms.FloatField(required=False)
+    fat = forms.FloatField(required=False)
+    quantity = forms.FloatField(min_value=1)
