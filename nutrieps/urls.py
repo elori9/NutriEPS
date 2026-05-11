@@ -19,4 +19,6 @@ urlpatterns = [
     path('add-consumption/', views.add_consumption, name='add_consumption'),
     # Delete food from consumption log
     path('delete-consumption/<int:log_id>/', views.delete_consumption, name='delete_consumption'),
+    # Modify food from consumpiton log
+    path('history/edit/<int:pk>/', views.ConsumptionUpdateView.as_view(), name='edit_consumption'),
 ]

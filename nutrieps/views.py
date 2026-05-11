@@ -14,6 +14,11 @@ from .models import UserProfile, ConsumptionLog, WeightLog, FoodItem
 from .services import search_foods
 
 
+from django.core.exceptions import PermissionDenied
+from django.views.generic.edit import UpdateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+
 # Create your views here.
 
 def home(request):
@@ -322,3 +327,24 @@ class SignUpView(CreateView):
     form_class = UserCreationForm
     template_name = 'registration/signup.html'
     success_url = reverse_lazy('login')
+
+class CheckIsOwnerMixin:
+    """Mixin per verificar que l'usuari actual és el propietari de l'objecte."""
+    def dispatch(self, request, *args, **kwargs):
+        obj = self.get_object()
+        # Verifiquem que el registre de consum pertany a l'usuari actual
+        if obj.user != request.user:
+            raise PermissionDenied("You do not have permission to edit this log.")
+        return super().dispatch(request, *args, **kwargs)
+
+
+class ConsumptionUpdateView(LoginRequiredMixin, CheckIsOwnerMixin, UpdateView):
+    """View to update the quantity of a consumed food item."""
+    model = ConsumptionLog
+    template_name = 'nutrieps/consumption_form.html'
+    fields = ['quantity'] # Només deixem editar la quantitat
+    success_url = reverse_lazy('nutrieps:history')
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
