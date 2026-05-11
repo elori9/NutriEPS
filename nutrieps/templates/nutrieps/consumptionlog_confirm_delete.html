@@ -1,10 +1,64 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'nutrieps/history.css' %}">
+{% endblock %}
+{% block title %}Delete Entry - NUTRIEPS{% endblock %}
 
-</body>
-</html>
+{% block content %}
+<div class="dashboard-container">
+    <div class="dash-greeting">
+        <h2>Delete Entry 🗑️</h2>
+        <p>You are about to remove a food log entry.</p>
+    </div>
+
+    <div class="summary-card modern-card" style="max-width: 550px; margin: 0 auto; text-align: center; padding: 3rem;">
+        <div style="font-size: 3.5rem; margin-bottom: 1.5rem;">⚠️</div>
+
+        <h3 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 1rem;">
+            Are you sure you want to delete this entry?
+        </h3>
+
+        <div style="background: #faf9f6; border-radius: 14px; padding: 1.2rem 1.5rem; margin-bottom: 2rem; text-align: left;">
+            <p style="margin-bottom: 0.4rem;">
+                <strong>Food:</strong> {{ object.food.name }}
+            </p>
+            <p style="margin-bottom: 0.4rem;">
+                <strong>Quantity:</strong> {{ object.quantity }}g
+            </p>
+            <p style="margin-bottom: 0;">
+                <strong>Date:</strong> {{ object.date|date:"F j, Y" }}
+            </p>
+        </div>
+
+        <p style="color: #6b7280; font-size: 0.9rem; margin-bottom: 2rem;">
+            This action cannot be undone.
+        </p>
+
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+            <a href="{% url 'nutrieps:history' %}" class="cancel-btn"
+               style="display: inline-flex; align-items: center; justify-content: center;
+                      background: #f3f4f6; color: #374151; padding: 0.75rem 2rem;
+                      border-radius: 50px; font-weight: 700; text-decoration: none;
+                      font-size: 0.95rem; transition: all 0.2s ease; border: 1px solid #e5e7eb;"
+               id="cancel-delete-btn">
+                Cancel
+            </a>
+
+            <form method="POST" style="display: inline;" id="delete-form">
+                {% csrf_token %}
+                <button type="submit"
+                        style="display: inline-flex; align-items: center; justify-content: center;
+                               background: linear-gradient(135deg, #ef4444, #dc2626); color: white;
+                               padding: 0.75rem 2rem; border-radius: 50px; font-weight: 700;
+                               font-size: 0.95rem; border: none; cursor: pointer;
+                               box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+                               transition: all 0.2s ease;"
+                        id="confirm-delete-btn">
+                    Yes, Delete
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

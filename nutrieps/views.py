@@ -2,16 +2,34 @@ from os import name
 
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, redirect
 
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
+from django.views.generic import CreateView, DeleteView
 
 from .forms import UserProfileForm, ConsumptionForm
 from .models import UserProfile, ConsumptionLog, WeightLog, FoodItem
 
 from .services import search_foods
+
+
+class CheckIsOwnerMixin:
+    """Mixin that verifies the object belongs to the currently logged-in user."""
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset)
+        if obj.user != self.request.user:
+            raise PermissionDenied
+        return obj
+
+
+class ConsumptionLogDeleteView(LoginRequiredMixin, CheckIsOwnerMixin, DeleteView):
+    """Class-based view to delete a ConsumptionLog with a confirmation page."""
+    model = ConsumptionLog
+    template_name = 'nutrieps/consumptionlog_confirm_delete.html'
+    success_url = reverse_lazy('nutrieps:history')
 
 
 # Create your views here.
@@ -306,16 +324,6 @@ def add_consumption(request):
             return redirect('nutrieps:history')
 
     return redirect('nutrieps:search')
-
-
-@login_required
-def delete_consumption(request, log_id):
-    """View to delete a consumption log"""
-    if request.method == 'POST':
-        log = ConsumptionLog.objects.filter(id=log_id, user=request.user).first()
-        if log:
-            log.delete()
-    return redirect('nutrieps:history')
 
 
 class SignUpView(CreateView):

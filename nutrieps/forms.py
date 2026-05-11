@@ -36,6 +36,18 @@ class UserProfileForm(forms.Form):
 
 
 class ConsumptionForm(ModelForm):
+    food_name = forms.CharField(required=False, widget=forms.HiddenInput())
+    calories = forms.FloatField(required=False, widget=forms.HiddenInput())
+    protein = forms.FloatField(required=False, widget=forms.HiddenInput())
+    carbs = forms.FloatField(required=False, widget=forms.HiddenInput())
+    fat = forms.FloatField(required=False, widget=forms.HiddenInput())
+
     class Meta:
         model = ConsumptionLog
+        fields = ['quantity', 'food']
         exclude = ('user', 'date',)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # We make 'food' optional because we might be creating it from food_name
+        self.fields['food'].required = False
