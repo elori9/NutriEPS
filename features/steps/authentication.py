@@ -12,6 +12,5 @@ def step_impl(context, username, password):
     context.browser.visit(context.get_url('/accounts/login/'))
     context.browser.fill('username', username)
     context.browser.fill('password', password)
-    # Busquem el botó de tipus submit i fem clic
     button = context.browser.find_by_css('button[type="submit"]').first
     button.click()

@@ -15,7 +15,7 @@ from .services import search_foods
 
 
 from django.core.exceptions import PermissionDenied
-from django.views.generic.edit import UpdateView, DeleteView
+from django.views.generic.edit import FormView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
@@ -285,35 +285,6 @@ def history(request):
     }
     return render(request, 'nutrieps/history.html', context)
 
-
-@login_required
-def add_consumption(request):
-    """View to handle adding a food item to the consumption log via POST"""
-    if request.method == 'POST':
-        form = ConsumptionForm(request.POST)
-        if form.is_valid():
-            food, _ = FoodItem.objects.get_or_create(
-                name=form.cleaned_data['food_name'],
-                defaults={
-                    'calories': form.cleaned_data['calories'],
-                    'protein': form.cleaned_data.get('protein', 0.0) or 0.0,
-                    'carbs': form.cleaned_data.get('carbs', 0.0) or 0.0,
-                    'fat': form.cleaned_data.get('fat', 0.0) or 0.0
-                }
-            )
-
-            ConsumptionLog.objects.create(
-                user=request.user,
-                food=food,
-                quantity=form.cleaned_data['quantity']
-            )
-
-            return redirect('nutrieps:history')
-
-
-    return redirect('nutrieps:search')
-
-
 class SignUpView(CreateView):
     form_class = UserCreationForm
     template_name = 'registration/signup.html'
@@ -328,7 +299,34 @@ class CheckIsOwnerMixin:
             raise PermissionDenied("You do not have permission to edit this log.")
         return super().dispatch(request, *args, **kwargs)
 
+class ConsumptionCreateView(LoginRequiredMixin, FormView):
+    """View to handle adding a food item to the consumption log"""
+    form_class = ConsumptionForm
+    template_name = 'nutrieps/consumption_form.html'
+    success_url = reverse_lazy('nutrieps:history')
 
+    # Override per assignar l'usuari al registre de consum abans de guardar
+    def form_valid(self, form):
+        # Creem o recuperem l'aliment de la base de dades
+        food, _ = FoodItem.objects.get_or_create(
+            name=form.cleaned_data['food_name'],
+            defaults={
+                'calories': form.cleaned_data['calories'],
+                'protein': form.cleaned_data.get('protein', 0.0) or 0.0,
+                'carbs': form.cleaned_data.get('carbs', 0.0) or 0.0,
+                'fat': form.cleaned_data.get('fat', 0.0) or 0.0
+            }
+        )
+
+        # Creem el registre de consum per a l'usuari actual
+        ConsumptionLog.objects.create(
+            user=self.request.user,
+            food=food,
+            quantity=form.cleaned_data['quantity']
+        )
+
+        return super().form_valid(form)
+    
 class ConsumptionDeleteView(LoginRequiredMixin, CheckIsOwnerMixin, DeleteView):
     """View to delete a consumption log with confirmation screen."""
     model = ConsumptionLog

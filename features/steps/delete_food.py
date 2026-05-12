@@ -3,19 +3,30 @@ from behave import *
 use_step_matcher("parse")
 
 
-@given('Exists a food "{food_name}" with {calories:d} calories')
-def step_impl(context, food_name, calories):
+@given('Exists a food')
+def step_impl(context):
     from nutrieps.models import FoodItem
-    FoodItem.objects.create(name=food_name, calories=calories, protein=0, carbs=0, fat=0)
+    for row in context.table:
+        FoodItem.objects.create(
+            name=row['name'], 
+            calories=float(row['calories']), 
+            protein=0, carbs=0, fat=0
+        )
 
-
-@given('Exists a consumption log of "{food_name}" {quantity:d}g for user "{username}"')
-def step_impl(context, food_name, quantity, username):
+@given('Exists a consumption log for user "{username}"')
+def step_impl(context, username):
     from django.contrib.auth.models import User
     from nutrieps.models import FoodItem, ConsumptionLog
+    
     user = User.objects.get(username=username)
-    food = FoodItem.objects.get(name=food_name)
-    context.consumption_log = ConsumptionLog.objects.create(user=user, food=food, quantity=quantity)
+    
+    for row in context.table:
+        food = FoodItem.objects.get(name=row['food_name'])
+        context.consumption_log = ConsumptionLog.objects.create(
+            user=user, 
+            food=food, 
+            quantity=float(row['quantity'])
+        )
 
 
 @when('I go to the history page')
@@ -25,7 +36,6 @@ def step_impl(context):
 
 @when('I click the delete button for "{food_name}"')
 def step_impl(context, food_name):
-    # Find the delete link (🗑️) for the specified food
     delete_links = context.browser.find_by_css('a[title="Delete"]')
     assert len(delete_links) > 0, "No delete buttons found on the page"
     delete_links.first.click()

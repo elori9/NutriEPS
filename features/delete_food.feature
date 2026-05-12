@@ -5,8 +5,12 @@ Feature: Delete Food Consumption
 
   Background: There is a registered user with a food log entry
     Given Exists a user "user1" with password "testpass123"
-    And Exists a food "Banana" with 89 calories
-    And Exists a consumption log of "Banana" 150g for user "user1"
+    And Exists a food
+      | name   | calories |
+      | Banana | 89       |
+    And Exists a consumption log for user "user1"
+      | food_name | quantity |
+      | Banana    | 150      |
 
   Scenario: Delete own food consumption with confirmation
     Given I login as user "user1" with password "testpass123"
@@ -27,5 +31,6 @@ Feature: Delete Food Consumption
     And I should see "Banana" in the food log
 
   Scenario: Cannot delete food consumption without login
+    Given I'm not logged in
     When I try to access the delete page for the consumption log
     Then I am redirected to the login page
