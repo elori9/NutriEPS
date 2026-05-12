@@ -24,7 +24,7 @@ def step_impl(context):
 
 
 @when('I click the delete button for "{food_name}"')
-def step_impl(context):
+def step_impl(context, food_name):
     # Find the delete link (🗑️) for the specified food
     delete_links = context.browser.find_by_css('a[title="Delete"]')
     assert len(delete_links) > 0, "No delete buttons found on the page"
