@@ -17,9 +17,27 @@ from .services import search_foods
 from django.core.exceptions import PermissionDenied
 from django.views.generic.edit import FormView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
+
+from .serializers import FoodItemSerializer
 
 
 # Create your views here.
+
+class FoodItemListAPIView(generics.ListAPIView):
+    serializer_class = FoodItemSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        search_term = self.request.GET.get('q', '').strip()
+
+        queryset = FoodItem.objects.all()
+
+        if search_term:
+            queryset = queryset.filter(name__icontains=search_term)
+
+        return queryset.order_by('name')[:20]
 
 def home(request):
     """Home page view - P6 logic. Real data from database"""

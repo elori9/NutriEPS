@@ -21,4 +21,6 @@ urlpatterns = [
     path('history/delete/<int:pk>/', views.ConsumptionDeleteView.as_view(), name='delete_consumption'),
     # Modify food from consumpiton log
     path('history/edit/<int:pk>/', views.ConsumptionUpdateView.as_view(), name='edit_consumption'),
+
+    path('api/foods/', views.FoodItemListAPIView.as_view(), name='api_foods'),
 ]
