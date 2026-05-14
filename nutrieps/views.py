@@ -1,5 +1,4 @@
-from os import name
-
+from django.http import JsonResponse
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
@@ -17,27 +16,9 @@ from .services import search_foods
 from django.core.exceptions import PermissionDenied
 from django.views.generic.edit import FormView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated
-
-from .serializers import FoodItemSerializer
 
 
 # Create your views here.
-
-class FoodItemListAPIView(generics.ListAPIView):
-    serializer_class = FoodItemSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        search_term = self.request.GET.get('q', '').strip()
-
-        queryset = FoodItem.objects.all()
-
-        if search_term:
-            queryset = queryset.filter(name__icontains=search_term)
-
-        return queryset.order_by('name')[:20]
 
 def home(request):
     """Home page view - P6 logic. Real data from database"""
@@ -302,6 +283,37 @@ def history(request):
         'is_today': is_today
     }
     return render(request, 'nutrieps/history.html', context)
+
+
+@login_required
+def api_foods(request):
+    """API for search food"""
+    search_term = request.GET.get('q', '').strip()
+    results = []
+
+    if search_term:
+        # We search on our db
+        local_foods = FoodItem.objects.filter(name__icontains=search_term).order_by('name')[:20]
+
+        if local_foods.exists():
+            for food in local_foods:
+                results.append({
+                    'name': food.name,
+                    'calories': food.calories,
+                    'protein': food.protein,
+                    'carbs': food.carbs,
+                    'fat': food.fat
+                })
+        else:
+            # Food not on our db, use the external api
+            try:
+                results = search_foods(search_term)
+            except Exception as e:
+                print(f"Error with external API: {e}")
+                results = []
+
+    return JsonResponse(results, safe=False)
+
 
 class SignUpView(CreateView):
     form_class = UserCreationForm

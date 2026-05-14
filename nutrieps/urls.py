@@ -19,8 +19,8 @@ urlpatterns = [
     path('add-consumption/', views.ConsumptionCreateView.as_view(), name='add_consumption'),
     # Delete food from consumption log (confirmation screen)
     path('history/delete/<int:pk>/', views.ConsumptionDeleteView.as_view(), name='delete_consumption'),
-    # Modify food from consumpiton log
+    # Modify food from consumption log
     path('history/edit/<int:pk>/', views.ConsumptionUpdateView.as_view(), name='edit_consumption'),
 
-    path('api/foods/', views.FoodItemListAPIView.as_view(), name='api_foods'),
+    path('api/foods/', views.api_foods, name='api_foods'),
 ]
