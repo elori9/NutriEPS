@@ -12,9 +12,6 @@ vars.env
 # IDE
 .idea/
 
-# Django
-db.sqlite3
-
 # OS
 .DS_Store
 
