@@ -12,65 +12,80 @@
         <p>Track your nutrition and reach your fitness goals today.</p>
     </div>
 
-    <div class="dash-summary-grid">
-        <div class="summary-card">
-            <div class="card-header"><h3>Calories</h3></div>
-            <div class="tracker-body">
-                <div class="calorie-doughnut">
-                    <div class="doughnut-text">
-                        <span class="calories-left">{{ calories_remaining }}</span>
-                        <p>Remaining</p>
+    <div class="row mb-4">
+
+        <div class="col-12 col-md-6 mb-3">
+            <div class="summary-card h-100">
+                <div class="card-header"><h3>Calories</h3></div>
+                <div class="tracker-body">
+                    <div class="calorie-doughnut">
+                        <div class="doughnut-text">
+                            <span class="calories-left">{{ calories_remaining }}</span>
+                            <p>Remaining</p>
+                        </div>
                     </div>
-                </div>
-                <div class="calorie-list">
-                    <div class="c-item">Goal <span>{{ calories_goal }}</span></div>
-                    <div class="c-item">Food <span class="orange-txt">{{ calories_consumed }}</span></div>
+                    <div class="calorie-list">
+                        <div class="c-item">Goal <span>{{ calories_goal }}</span></div>
+                        <div class="c-item">Food <span class="orange-txt">{{ calories_consumed }}</span></div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="summary-card">
-            <div class="card-header"><h3>Daily Macronutrients</h3></div>
-            <div class="macro-body">
-                <div class="macro-item">
-                    <div class="macro-circle blue-ring">{{ total_carbs }}g</div>
-                    <span>Carbs</span>
-                </div>
-                <div class="macro-item">
-                    <div class="macro-circle purple-ring">{{ total_fat }}g</div>
-                    <span>Fat</span>
-                </div>
-                <div class="macro-item">
-                    <div class="macro-circle green-ring">{{ total_protein }}g</div>
-                    <span>Protein</span>
+        <div class="col-12 col-md-6 mb-3">
+            <div class="summary-card h-100">
+                <div class="card-header"><h3>Daily Macronutrients</h3></div>
+                <div class="macro-body">
+                    <div class="macro-item">
+                        <div class="macro-circle blue-ring">{{ total_carbs }}g</div>
+                        <span>Carbs</span>
+                    </div>
+                    <div class="macro-item">
+                        <div class="macro-circle purple-ring">{{ total_fat }}g</div>
+                        <span>Fat</span>
+                    </div>
+                    <div class="macro-item">
+                        <div class="macro-circle green-ring">{{ total_protein }}g</div>
+                        <span>Protein</span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <h3 class="section-label">Quick Actions</h3>
-    <div class="quick-links-grid">
-        <a href="{% url 'nutrieps:search' %}" class="nav-button-card">
-            <div class="nav-icon bg-orange-light">🔍</div>
-            <div class="nav-info">
-                <h4>Search Food</h4>
-                <p>Log your meals instantly.</p>
-            </div>
-        </a>
-        <a href="{% url 'nutrieps:history' %}" class="nav-button-card">
-            <div class="nav-icon bg-green-light">📅</div>
-            <div class="nav-info">
-                <h4>My History</h4>
-                <p>Check your past logs.</p>
-            </div>
-        </a>
-        <a href="{% url 'nutrieps:profile' %}" class="nav-button-card">
-            <div class="nav-icon bg-gray-light">👤</div>
-            <div class="nav-info">
-                <h4>My Profile</h4>
-                <p>Edit your goals.</p>
-            </div>
-        </a>
+
+    <div class="row">
+
+        <div class="col-12 col-md-4 mb-3">
+            <a href="{% url 'nutrieps:search' %}" class="nav-button-card h-100 d-flex align-items-center">
+                <div class="nav-icon bg-orange-light">🔍</div>
+                <div class="nav-info">
+                    <h4>Search Food</h4>
+                    <p>Log your meals instantly.</p>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-12 col-md-4 mb-3">
+            <a href="{% url 'nutrieps:history' %}" class="nav-button-card h-100 d-flex align-items-center">
+                <div class="nav-icon bg-green-light">📅</div>
+                <div class="nav-info">
+                    <h4>My History</h4>
+                    <p>Check your past logs.</p>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-12 col-md-4 mb-3">
+            <a href="{% url 'nutrieps:profile' %}" class="nav-button-card h-100 d-flex align-items-center">
+                <div class="nav-icon bg-gray-light">👤</div>
+                <div class="nav-info">
+                    <h4>My Profile</h4>
+                    <p>Edit your goals.</p>
+                </div>
+            </a>
+        </div>
     </div>
 </div>
 
@@ -79,7 +94,8 @@
     <section class="top">
         <div class="top-content">
             <h1>Good health starts with good nutrition.</h1>
-            <p>Want to pay more attention to what you eat? Track your meals, learn your habits, and reach your goals with NUTRIEPS.</p>
+            <p>Want to pay more attention to what you eat? Track your meals, learn your habits, and reach your goals
+                with NUTRIEPS.</p>
             <a href="{% url 'signup' %}" class="btn-start">START</a>
         </div>
         <div class="image-side">
@@ -106,7 +122,8 @@
             </div>
             <div class="food-text">
                 <h2>Choose from millions of foods to keep your log.</h2>
-                <p>Access a breakdown of calories and nutrients, compare portion sizes, and discover how the foods you consume support your goals.</p>
+                <p>Access a breakdown of calories and nutrients, compare portion sizes, and discover how the foods you
+                    consume support your goals.</p>
             </div>
         </div>
     </section>
