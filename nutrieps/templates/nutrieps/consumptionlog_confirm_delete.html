@@ -1,0 +1,187 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Delete Food Log - NUTRIEPS{% endblock %}
+
+{% block extra_css %}
+<style>
+    .delete-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 5rem 1rem;
+        background-color: #FAF9F6;
+        font-family: 'Inter', -apple-system, sans-serif;
+    }
+
+    .delete-card {
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-top: 4px solid #216655;
+        border-radius: 8px;
+        padding: 3rem 2.5rem;
+        width: 100%;
+        max-width: 450px;
+        box-shadow: 0 4px 25px rgba(0, 0, 0, 0.04);
+    }
+
+    .delete-card-header {
+        margin-bottom: 2rem;
+    }
+
+    .delete-card-header h2 {
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: #111827;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin: 0 0 0.75rem 0;
+    }
+
+    .delete-card-header .delete-msg {
+        font-size: 0.95rem;
+        color: #6b7280;
+        line-height: 1.6;
+    }
+
+    .delete-card-header .delete-msg strong {
+        color: #111827;
+        font-weight: 700;
+        border-bottom: 1.5px solid #F97316;
+        padding-bottom: 1px;
+    }
+
+    .food-detail-box {
+        background: #fafafa;
+        border: 1px solid #e5e7eb;
+        border-radius: 6px;
+        padding: 1.25rem;
+        margin: 2rem 0;
+    }
+
+    .food-detail-box .detail-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 0;
+    }
+
+    .food-detail-box .detail-row:not(:last-child) {
+        border-bottom: 1px dashed #e5e7eb;
+    }
+
+    .food-detail-box .detail-label {
+        font-size: 0.75rem;
+        color: #6b7280;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+    }
+
+    .food-detail-box .detail-value {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #111111;
+    }
+
+    .warning-text {
+        font-size: 0.8rem;
+        color: #ef4444;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 1.75rem;
+        font-weight: 600;
+        text-align: center;
+    }
+
+    .btn-row {
+        display: flex;
+        gap: 0.75rem;
+    }
+
+    .btn-delete {
+        flex: 7;
+        padding: 1rem;
+        background: #ef4444;
+        color: #ffffff;
+        border: 1px solid #ef4444;
+        border-radius: 4px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .btn-delete:hover {
+        background: #dc2626;
+        border-color: #dc2626;
+    }
+
+    .btn-cancel {
+        flex: 3;
+        padding: 1rem;
+        background: #ffffff;
+        color: #111827;
+        border: 1px solid #e5e7eb;
+        border-radius: 4px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+        transition: all 0.2s ease;
+    }
+
+    .btn-cancel:hover {
+        border-color: #216655;
+        color: #216655;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="delete-wrapper">
+    <div class="delete-card">
+
+        <div class="delete-card-header">
+            <h2>Delete Food Log</h2>
+            <p class="delete-msg">
+                Are you sure you want to delete the entry for
+                <strong>{{ object.food.name }}</strong>?
+            </p>
+        </div>
+
+        <div class="food-detail-box">
+            <div class="detail-row">
+                <span class="detail-label">Food</span>
+                <span class="detail-value">{{ object.food.name }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Quantity</span>
+                <span class="detail-value">{{ object.quantity }} g</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Date</span>
+                <span class="detail-value">{{ object.date }}</span>
+            </div>
+        </div>
+
+        <p class="warning-text">This action cannot be undone</p>
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="btn-row">
+                <a href="{% url 'nutrieps:history' %}" class="btn-cancel">Cancel</a>
+                <button type="submit" class="btn-delete">Confirm Delete</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+{% endblock %}

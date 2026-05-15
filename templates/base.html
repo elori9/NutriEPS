@@ -8,34 +8,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}NUTRIEPS{% endblock %}</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'nutrieps/style.css' %}?v">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@800;900&family=Inter:wght@400;500;600;700&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+          integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'nutrieps/style/style.css' %}?v">
     {% block extra_css %}{% endblock %}
     <link rel="icon" href="{% static 'nutrieps/images/logo.png' %}" type="image/png">
-
 </head>
-    <header class="site-header">
-        <div class="header-inner">
-            <a href="{% url 'nutrieps:home' %}" class="logo">NUTRI<span class="eps-color">EPS</span></a>
+<body>
+<header class="site-header">
+    <div class="header-inner">
+        <a href="{% url 'nutrieps:home' %}" class="logo">NUTRI<span class="eps-color">EPS</span></a>
 
-            <nav class="main-nav">
-                <a href="{% url 'nutrieps:home' %}" class="nav-link">Home</a>
-                <a href="{% url 'nutrieps:search' %}" class="nav-link">Search</a>
-                <a href="{% url 'nutrieps:history' %}" class="nav-link">History</a>
-                <a href="{% url 'nutrieps:profile' %}" class="profile-btn">Profile</a>
-            </nav>
-        </div>
-    </header>
+        <nav class="main-nav">
+            <a href="{% url 'nutrieps:home' %}" class="nav-link">Home</a>
+            <a href="{% url 'nutrieps:search' %}" class="nav-link">Search</a>
+            <a href="{% url 'nutrieps:history' %}" class="nav-link">History</a>
+            <a href="{% url 'nutrieps:profile' %}" class="profile-btn">Profile</a>
+        </nav>
+    </div>
+</header>
 
-    <main class="main-container">
-        {% block content %}{% endblock %}
-    </main>
+<main class="main-container">
+    {% block content %}{% endblock %}
+</main>
 
-    <footer class="site-footer">
-        <div class="footer-bottom">
-            <p>&copy; 2026 NUTRIEPS. Track your fitness goals.</p>
-        </div>
-    </footer>
+<footer class="site-footer">
+    <div class="footer-bottom">
+        <p>&copy; 2026 NUTRIEPS. Track your fitness goals.</p>
+    </div>
+</footer>
 
 </body>
 </html>

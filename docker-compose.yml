@@ -8,6 +8,7 @@ services:
     # Mount the current directory into /app in the container
     volumes:
       - .:/app
+      - /app/.venv
 
     depends_on:
       - db

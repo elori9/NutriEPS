@@ -1,6 +1,7 @@
 # nutrieps/forms.py
 from django import forms
 
+
 class UserProfileForm(forms.Form):
     # Activity level options (for Harris-Benedict / Mifflin-St Jeor formula)
     ACTIVITY_CHOICES = [
@@ -34,7 +35,7 @@ class UserProfileForm(forms.Form):
 class ConsumptionForm(forms.Form):
     food_name = forms.CharField(max_length=200)
     calories = forms.FloatField()
-    protein = forms.FloatField(required=False, initial=0)
-    carbs = forms.FloatField(required=False, initial=0)
-    fat = forms.FloatField(required=False, initial=0)
-    quantity = forms.FloatField(min_value=1, label="Quantity (g)")
+    protein = forms.FloatField(required=False)
+    carbs = forms.FloatField(required=False)
+    fat = forms.FloatField(required=False)
+    quantity = forms.FloatField(min_value=1)
