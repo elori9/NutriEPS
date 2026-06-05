@@ -44,13 +44,23 @@
                 {% if historical_records %}
                 <div class="history-list">
                     {% for record in historical_records %}
-                    <div class="history-item">
+
+                    <div class="history-item" vocab="http://schema.org/" typeof="ConsumeAction">
                         <div class="history-details">
-                            <span class="history-name">{{ record.food.name }}</span>
+
+                            <div property="object" typeof="MenuItem">
+                                <span class="history-name" property="name">{{ record.food.name }}</span>
+
+                                <span property="nutrition" typeof="NutritionInformation">
+                                    <meta property="servingSize" content="{{ record.quantity }}g">
+                                </span>
+                            </div>
+
                             <div style="display: flex; gap: 0.5rem; margin-top: 0.3rem;">
-                                <span class="history-date">{{ record.date }}</span>
+                                <span class="history-date" property="startTime">{{ record.date }}</span>
                             </div>
                         </div>
+
                         <div class="history-amount" style="display: flex; align-items: center; gap: 0.5rem;">
                             <span class="amount-pill pill-orange">{{ record.quantity }}g</span>
                             <a href="{% url 'nutrieps:edit_consumption' record.id %}"
@@ -119,14 +129,20 @@
                 {% if weight_history %}
                 <div class="history-list">
                     {% for weight in weight_history %}
-                    <div class="history-item">
+
+                    <div class="history-item" vocab="http://schema.org/" typeof="Observation">
                         <div class="history-details">
-                            <span class="history-name">Weight Check</span>
-                            <span class="history-date">{{ weight.date }}</span>
+                            <span class="history-name" property="name">Weight Check</span>
+                            <span class="history-date" property="observationDate">{{ weight.date }}</span>
                         </div>
+
                         <div class="history-amount"
-                             style="display: flex; flex-direction: column; align-items: flex-end; gap: 0.3rem;">
-                            <span class="amount-pill pill-blue">{{ weight.weight }} kg</span>
+                             style="display: flex; flex-direction: column; align-items: flex-end; gap: 0.3rem;"
+                             property="value" typeof="QuantitativeValue">
+                            <span class="amount-pill pill-blue">
+                                <span property="value">{{ weight.weight }}</span>
+                                <span property="unitText" content="KGM">kg</span>
+                            </span>
                         </div>
                     </div>
                     {% endfor %}
